@@ -1,4 +1,4 @@
-# Dioxux Charts
+# Dioxus Charts
 
 A simple chart components library for Dioxus
 
@@ -30,21 +30,21 @@ use dioxus::prelude::*;
 use dioxus_charts::BarChart;
 
 fn app(cx: Scope) -> Element {
-	cx.render(rsx! {
-		BarChart {
-			padding_top: 30,
-			padding_left: 70,
-			padding_right: 50,
-			padding_bottom: 30,
-			bar_width: "10%",
-			horizontal_bars: true,
-			label_interpolation: |v| format!("{v}%"),
-			series: vec![
-				vec![63.0, 14.4, 8.0, 5.1, 1.8],
-			],
-			labels: vec!["Chrome".into(), "Safari".into(), "IE/Edge".into(), "Firefox".into(), "Opera".into()]
-		}
-	})
+    cx.render(rsx! {
+        BarChart {
+            padding_top: 30,
+            padding_left: 70,
+            padding_right: 50,
+            padding_bottom: 30,
+            bar_width: "10%",
+            horizontal_bars: true,
+            label_interpolation: |v| format!("{v}%"),
+            series: vec![
+                vec![63.0, 14.4, 8.0, 5.1, 1.8],
+            ],
+            labels: vec!["Chrome".into(), "Safari".into(), "IE/Edge".into(), "Firefox".into(), "Opera".into()]
+        }
+    })
 }
  ```
 
