@@ -48,6 +48,39 @@ fn app(cx: Scope) -> Element {
 }
  ```
 
+There is also a couple of examples in the `examples` folder with a `Makefile.toml` that makes it
+easier to build them. You need to install cargo-make first to make use of them:
+
+```sh
+cargo install cargo-make
+```
+
+You will also need to have [`sass`](https://sass-lang.com/) and [`tailwindcss`](https://tailwindcss.com/)
+installed in your system for the make commands to generate the css files.
+
+Then for the desktop demo, inside the examples folder:
+
+```sh
+cd examples
+cargo make desktop
+```
+
+For the web demo you need to have `trunk` for the dev-server and the rust wasm target installed:
+
+```sh
+cargo install trunk
+rustup target add wasm32-unknown-unknown
+```
+
+Then build and launch the dev-server inside the examples folder:
+
+```sh
+cargo make web
+```
+
+Please check out the [Dioxus reference guide](https://dioxuslabs.com/reference/index.html) for more
+information.
+
 ## License
 
 Licensed under either of [Apache License, Version 2.0](LICENSE-APACHE) or
