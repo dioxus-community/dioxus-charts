@@ -1,0 +1,16 @@
+[package]
+name = "dioxus-charts"
+version = "0.1.0"
+authors = ["Hilton Medeiros"]
+edition = "2021"
+description = "A chart components library for dioxus"
+license = "MIT OR Apache-2.0"
+keywords = ["ui", "gui", "react", "wasm", "dioxus"]
+categories = ["wasm", "gui", "web-programming"]
+
+[dependencies]
+log = "0.4"
+dioxus = "0.2.4"
+
+[profile.release]
+lto = true

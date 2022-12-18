@@ -1,0 +1,12 @@
+[package]
+name = "charts-demo"
+version = "0.1.0"
+authors = ["Hilton Medeiros"]
+edition = "2021"
+description = "A dioxus-charts element demo"
+license = "MIT OR Apache-2.0"
+publish = false
+
+[dependencies]
+dioxus = { version = "0.2.4" }
+dioxus-charts = { path = "../.." }

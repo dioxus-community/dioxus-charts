@@ -1,0 +1,38 @@
+
+$col1: #8f327b;
+$col2: #b33473;
+$col3: #d03e65;
+$col4: #e55253;
+$col5: #f06d3e;
+$col6: #f18c27;
+$col7: #e8ab0c;
+$col8: #d6ca0b;
+
+
+g.dx-series-0 > path { fill: $col1; }
+g.dx-series-1 > path { fill: $col2; }
+g.dx-series-2 > path { fill: $col3; }
+g.dx-series-3 > path { fill: $col4; }
+g.dx-series-4 > path { fill: $col5; }
+g.dx-series-5 > path { fill: $col6; }
+g.dx-series-6 > path { fill: $col7; }
+g.dx-series-7 > path { fill: $col8; }
+
+g.dx-bar-group-0 > line { stroke: $col1; }
+g.dx-bar-group-1 > line { stroke: $col2; }
+g.dx-bar-group-2 > line { stroke: $col3; }
+g.dx-bar-group-3 > line { stroke: $col4; }
+g.dx-bar-group-4 > line { stroke: $col5; }
+g.dx-bar-group-5 > line { stroke: $col6; }
+g.dx-bar-group-6 > line { stroke: $col7; }
+g.dx-bar-group-7 > line { stroke: $col8; }
+
+g.dx-line-0 > line, g.dx-line-0 > path { stroke: $col1; }
+g.dx-line-1 > line, g.dx-line-1 > path { stroke: $col2; }
+g.dx-line-2 > line, g.dx-line-2 > path { stroke: $col3; }
+g.dx-line-3 > line, g.dx-line-3 > path { stroke: $col4; }
+g.dx-line-4 > line, g.dx-line-4 > path { stroke: $col5; }
+g.dx-line-5 > line, g.dx-line-5 > path { stroke: $col6; }
+g.dx-line-6 > line, g.dx-line-6 > path { stroke: $col7; }
+g.dx-line-7 > line, g.dx-line-7 > path { stroke: $col8; }
+
