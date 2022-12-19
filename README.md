@@ -13,6 +13,9 @@ The components available currently are:
 - `BarChart`: for Bar and Stacked Bar charts, vertical or horizontal
 - `LineChart`
 
+You can check them out at the very simple [demo site](https://hiltonm.github.io/dioxus-charts-demo/)
+for now.
+
 ## Usage
 
 This crate is [on crates.io](https://crates.io/crates/dioxus-charts) and can be
@@ -48,8 +51,8 @@ fn app(cx: Scope) -> Element {
 }
  ```
 
-There is also a couple of examples in the `examples` folder with a `Makefile.toml` that makes it
-easier to build them. You need to install cargo-make first to make use of them:
+There is also a couple of examples in the `examples` folder with a `Makefile.toml` that makes it easier
+to build them. You need to install cargo-make first to make use of them:
 
 ```sh
 cargo install cargo-make
@@ -65,7 +68,8 @@ cd examples
 cargo make desktop
 ```
 
-For the web demo you need to have `trunk` for the dev-server and the rust wasm target installed:
+The web example was used to generate the [demo site](https://hiltonm.github.io/dioxus-charts-demo/).
+To test it out yourself you need to have `trunk` for the dev-server and the rust wasm target installed:
 
 ```sh
 cargo install trunk
