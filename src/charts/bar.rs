@@ -342,7 +342,7 @@ pub fn BarChart<'a>(cx: Scope<'a, BarChartProps<'a>>) -> Element {
                                 text_anchor: "{text.anchor}",
                                 class: "{cx.props.class_grid_label}",
                                 alignment_baseline: "{text.baseline}",
-                                [label.as_str()]
+                                label.as_str()
                             }
                         })
                     }
@@ -370,7 +370,7 @@ pub fn BarChart<'a>(cx: Scope<'a, BarChartProps<'a>>) -> Element {
                                             line_height: "1",
                                             float: "right",
                                             text_align: "right",
-                                            [label.as_str()]
+                                            label.as_str()
                                         }
                                     }
                                 } else {
@@ -383,7 +383,7 @@ pub fn BarChart<'a>(cx: Scope<'a, BarChartProps<'a>>) -> Element {
                                             display: "inline-block",
                                             line_height: "1",
                                             text_align: "center",
-                                            [label.as_str()]
+                                            label.as_str()
                                         }
                                     }
                                 }
@@ -488,7 +488,7 @@ pub fn BarChart<'a>(cx: Scope<'a, BarChartProps<'a>>) -> Element {
                                                         text_anchor: "{text.anchor}",
                                                         class: "{cx.props.class_bar_label}",
                                                         alignment_baseline: "{text.baseline}",
-                                                        [bar_label.as_str()]
+                                                        bar_label.as_str()
                                                     }
                                                 }
                                             }),

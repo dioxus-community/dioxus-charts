@@ -263,7 +263,7 @@ pub fn LineChart<'a>(cx: Scope<'a, LineChartProps<'a>>) -> Element {
                                 text_anchor: "{text.anchor}",
                                 class: "{cx.props.class_grid_label}",
                                 alignment_baseline: "{text.baseline}",
-                                [label.as_str()]
+                                label.as_str()
                             }
                         })
                     }
@@ -333,14 +333,14 @@ pub fn LineChart<'a>(cx: Scope<'a, LineChartProps<'a>>) -> Element {
                                 }
                             }),
                             text_point.map(|point| {
-                                rsx! {cx,
+                                rsx! {
                                     text {
                                         dx: format_args!("{}", point.x + 10.0),
                                         dy: "{point.y}",
                                         text_anchor: "start",
                                         color: "rgb({color_var}, 40, 40)",
                                         class: "{cx.props.class_line_label}",
-                                        [label.as_str()]
+                                        label.as_str()
                                     }
                                 }
                             }),
