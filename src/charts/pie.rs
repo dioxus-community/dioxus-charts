@@ -168,7 +168,7 @@ pub fn PieChart<'a>(cx: Scope<'a, PieChartProps<'a>>) -> Element {
                 class: "{cx.props.class_chart}",
                 preserveAspectRatio: "xMidYMid meet",
                 xmlns: "http://www.w3.org/2000/svg",
-                normalized_series.iter().map(|v| {
+                normalized_series.iter().filter_map(|v| {
                     if *v != 0.0 {
                         let mut end_angle = if values_total > 0.0 {
                             m_start_angle + (v / values_total) * 360.0
@@ -204,7 +204,7 @@ pub fn PieChart<'a>(cx: Scope<'a, PieChartProps<'a>>) -> Element {
                                      L{center}Z")
                         };
 
-                        let element = rsx! {cx,
+                        let element = rsx! {
                             g {
                                 key: "{class_index}",
                                 class: "{cx.props.class_series} {cx.props.class_series}-{class_index}",
@@ -221,18 +221,18 @@ pub fn PieChart<'a>(cx: Scope<'a, PieChartProps<'a>>) -> Element {
                         color_var -= 75.0 * (1.0 / (class_index + 1) as f32);
                         class_index += 1;
                         m_start_angle = end_angle;
-                        element
+                        Some(element)
                     } else {
                         label_positions.push(Point::new(-1.0, -1.0));
                         None
                     }
                 }),
                 if let Some(ref labels) = cx.props.labels {
-                    rsx! {cx,
+                    Some(rsx! {
                         g {
-                            label_positions.iter().zip(labels.iter()).map(|(position, label)| {
+                            label_positions.iter().zip(labels.iter()).filter_map(|(position, label)| {
                                 if position.x > 0.0 {
-                                    rsx! {cx,
+                                    Some(rsx! {
                                         text {
                                             key: "{label}",
                                             dx: "{position.x}",
@@ -240,19 +240,19 @@ pub fn PieChart<'a>(cx: Scope<'a, PieChartProps<'a>>) -> Element {
                                             text_anchor: "middle",
                                             class: "{cx.props.class_label}",
                                             alignment_baseline: "middle",
-                                            [label.as_str()]
+                                            label.as_str()
                                         }
-                                    }
+                                    })
                                 } else {
                                     None
                                 }
                             })
                         }
-                    }
+                    })
                 } else if cx.props.show_labels {
-                    rsx! {cx,
+                    Some(rsx! {
                         g {
-                            label_positions.iter().zip(cx.props.series.iter()).map(|(position, value)| {
+                            label_positions.iter().zip(cx.props.series.iter()).filter_map(|(position, value)| {
                                 let label = if let Some(func) = cx.props.label_interpolation {
                                     func(*value)
                                 } else {
@@ -260,7 +260,7 @@ pub fn PieChart<'a>(cx: Scope<'a, PieChartProps<'a>>) -> Element {
                                 };
 
                                 if position.x > 0.0 {
-                                    rsx! {cx,
+                                    Some(rsx! {
                                         text {
                                             key: "label",
                                             dx: "{position.x}",
@@ -270,13 +270,13 @@ pub fn PieChart<'a>(cx: Scope<'a, PieChartProps<'a>>) -> Element {
                                             alignment_baseline: "middle",
                                             "{label}"
                                         }
-                                    }
+                                    })
                                 } else {
                                     None
                                 }
                             })
                         }
-                    }
+                    })
                 } else {
                     None
                 }
