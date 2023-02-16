@@ -6,7 +6,7 @@ use dioxus_charts::{BarChart, LineChart, PieChart};
 pub fn demo_element<'a>(cx: Scope<'a>) -> Element<'a> {
     cx.render(rsx! {
         style {
-            [include_str!("./custom.css")]
+            include_str!("./custom.css")
         },
         div {
             class: "bg-gray-600",

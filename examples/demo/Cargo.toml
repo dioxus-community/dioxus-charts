@@ -8,5 +8,5 @@ license = "MIT OR Apache-2.0"
 publish = false
 
 [dependencies]
-dioxus = { version = "0.2.4" }
+dioxus = "0.3.1"
 dioxus-charts = { path = "../.." }

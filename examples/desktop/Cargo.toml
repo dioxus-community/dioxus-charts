@@ -10,5 +10,5 @@ publish = false
 [dependencies]
 log = "0.4"
 env_logger = "0.10"
-dioxus = { version = "0.2.4", features = ["desktop"] }
+dioxus-desktop = "0.3.0"
 charts-demo = { path = "../demo" }
