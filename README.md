@@ -82,6 +82,11 @@ Then build and launch the dev-server inside the examples folder:
 cargo make web
 ```
 
+Note: if you get hit by an error when the web example launches, its possible you were blessed by a version
+mismatch issue caused by the rustwasm tooling getting out of sync. The simplest fix for that seems to be
+to just remove the Cargo.lock file from the `examples/web` folder. Check
+[this issue](https://github.com/rustwasm/wasm-bindgen/issues/2776) for more info if that doesn't do it.
+
 Please check out the [Dioxus reference guide](https://dioxuslabs.com/reference/index.html) for more
 information.
 
