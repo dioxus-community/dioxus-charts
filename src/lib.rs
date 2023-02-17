@@ -18,7 +18,7 @@ used by adding `dioxus-charts` to your dependencies in your project's `Cargo.tom
 
 ```toml
 [dependencies]
-dioxus-charts = "0.1.0"
+dioxus-charts = "0.1.1"
 ```
 
 [Dioxus]: https://dioxuslabs.com/
