@@ -14,11 +14,11 @@ or horizontal
 
 # Usage
 This crate is [on crates.io](https://crates.io/crates/dioxus-charts) and can be
-used by adding `dioxus_charts` to your dependencies in your project's `Cargo.toml`.
+used by adding `dioxus-charts` to your dependencies in your project's `Cargo.toml`.
 
 ```toml
 [dependencies]
-dioxus_charts = "0.1.0"
+dioxus-charts = "0.1.0"
 ```
 
 [Dioxus]: https://dioxuslabs.com/
