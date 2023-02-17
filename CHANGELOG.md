@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - This changelog
+- Cargo release config
 - README instructions
 
 ### Fixed
