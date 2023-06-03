@@ -166,7 +166,7 @@ pub fn PieChart<'a>(cx: Scope<'a, PieChartProps<'a>>) -> Element {
                 width: "{cx.props.width}",
                 height: "{cx.props.height}",
                 class: "{cx.props.class_chart}",
-                preserveAspectRatio: "xMidYMid meet",
+                preserve_aspect_ratio: "xMidYMid meet",
                 xmlns: "http://www.w3.org/2000/svg",
                 normalized_series.iter().filter_map(|v| {
                     if *v != 0.0 {

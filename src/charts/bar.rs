@@ -308,7 +308,7 @@ pub fn BarChart<'a>(cx: Scope<'a, BarChartProps<'a>>) -> Element {
                 width: "{cx.props.width}",
                 height: "{cx.props.height}",
                 class: "{cx.props.class_chart_bar}",
-                preserveAspectRatio: "xMidYMid meet",
+                preserve_aspect_ratio: "xMidYMid meet",
                 view_box: "0 0 {cx.props.viewbox_width} {cx.props.viewbox_height}",
                 cx.props.show_grid.then(|| rsx! {
                     g {

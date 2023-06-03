@@ -11,7 +11,7 @@ categories = ["wasm", "gui", "web-programming"]
 
 [dependencies]
 log = "0.4"
-dioxus = "0.3.1"
+dioxus = { version = "0.3.2", default-features = false, features = ["macro", "html"] }
 
 [profile.release]
 lto = true
