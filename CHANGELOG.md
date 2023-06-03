@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+
+## [0.1.2] - 2023-06-03
 ## [0.1.1] - 2023-02-17
 
 ### Added
@@ -26,5 +28,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Initial commit
 
 <!-- next-url -->
-[Unreleased]: https://github.com/hiltonm/dioxus-charts/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/hiltonm/dioxus-charts/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/hiltonm/dioxus-charts/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/hiltonm/dioxus-charts/compare/v0.1.0...v0.1.1
