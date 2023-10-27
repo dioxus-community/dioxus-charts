@@ -193,7 +193,7 @@ pub fn demo_element<'a>(cx: Scope<'a>) -> Element<'a> {
                                 label_position: LabelPosition::Outside,
                                 label_offset: 35.0,
                                 padding: 20.0,
-                                series: vec![59.54, 17.2, 9.59, 7.6, 5.53, 0.55]
+                                series: vec![59.54, 17.2, 9.59, 7.6, 5.53, 0.55],
                                 labels: vec!["Asia".into(), "Africa".into(), "Europe".into(), "N. America".into(), "S. America".into(), "Oceania".into()],
                             }
                         }

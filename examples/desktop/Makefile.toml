@@ -9,8 +9,8 @@ command = "cargo"
 args = ["run"]
 
 [tasks.css]
-command = "tailwindcss"
-args = ["-i", "src/input.css", "-o", "src/tailwind.css"]
+command = "npx"
+args = ["tailwindcss", "-i", "src/input.css", "-o", "src/tailwind.css"]
 
 [tasks.dev]
 dependencies = [
