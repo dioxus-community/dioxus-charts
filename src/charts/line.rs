@@ -7,7 +7,7 @@ use crate::types::*;
 #[allow(clippy::struct_excessive_bools)]
 #[derive(PartialEq, Props)]
 pub struct LineChartProps<'a> {
-    series: Series,
+    series: &'a Series,
     #[props(optional)]
     labels: Option<Labels>,
     #[props(optional)]
