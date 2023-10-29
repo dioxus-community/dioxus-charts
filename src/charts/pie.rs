@@ -17,7 +17,7 @@ pub enum LabelPosition {
 /// The `PieChart` properties struct for the configuration of the pie chart.
 #[derive(PartialEq, Props)]
 pub struct PieChartProps<'a> {
-    series: &'a Vec<f32>,
+    series: Vec<f32>,
     #[props(optional)]
     labels: Option<Labels>,
 

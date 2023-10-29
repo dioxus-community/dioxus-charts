@@ -7,7 +7,7 @@ use crate::types::*;
 #[allow(clippy::struct_excessive_bools)]
 #[derive(PartialEq, Props)]
 pub struct LineChartProps<'a> {
-    series: &'a Series,
+    series: Series,
     #[props(optional)]
     labels: Option<Labels>,
     #[props(optional)]
@@ -165,7 +165,7 @@ pub struct LineChartProps<'a> {
 pub fn LineChart<'a>(cx: Scope<'a, LineChartProps<'a>>) -> Element {
     for series in cx.props.series.iter() {
         if series.is_empty() {
-            return cx.render(rsx!("Pie chart error: empty series"));
+            return cx.render(rsx!("Line chart error: empty series"));
         }
     }
 

@@ -7,7 +7,7 @@ use crate::types::*;
 #[allow(clippy::struct_excessive_bools)]
 #[derive(PartialEq, Props)]
 pub struct BarChartProps<'a> {
-    series: &'a Series,
+    series: Series,
     #[props(optional)]
     labels: Option<Labels>,
 
@@ -163,7 +163,7 @@ pub struct BarChartProps<'a> {
 /// group of grid labels.
 #[allow(non_snake_case)]
 pub fn BarChart<'a>(cx: Scope<'a, BarChartProps<'a>>) -> Element {
-    for series in cx.props.series {
+    for series in cx.props.series.clone() {
         if series.is_empty() {
             return cx.render(rsx!("Bar chart error: empty series"));
         }
