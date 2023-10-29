@@ -163,7 +163,7 @@ pub struct BarChartProps<'a> {
 /// group of grid labels.
 #[allow(non_snake_case)]
 pub fn BarChart<'a>(cx: Scope<'a, BarChartProps<'a>>) -> Element {
-    for series in cx.props.series.clone() {
+    for series in cx.props.series.iter() {
         if series.is_empty() {
             return cx.render(rsx!("Bar chart error: empty series"));
         }
