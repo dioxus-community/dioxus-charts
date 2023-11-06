@@ -23,7 +23,7 @@ used by adding `dioxus-charts` to your dependencies in your project's `Cargo.tom
 
 ```toml
 [dependencies]
-dioxus-charts = "0.1.2"
+dioxus-charts = "0.1.3"
 ```
 
 ## Example
