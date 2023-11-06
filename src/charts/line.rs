@@ -165,7 +165,7 @@ pub struct LineChartProps<'a> {
 pub fn LineChart<'a>(cx: Scope<'a, LineChartProps<'a>>) -> Element {
     for series in cx.props.series.iter() {
         if series.is_empty() {
-            return cx.render(rsx!("Pie chart error: empty series"));
+            return cx.render(rsx!("Line chart error: empty series"));
         }
     }
 
@@ -239,7 +239,6 @@ pub fn LineChart<'a>(cx: Scope<'a, LineChartProps<'a>>) -> Element {
                         lines.iter().map(|line| {
                             rsx! {
                                 line {
-                                    key: "{line}",
                                     x1: "{line.min.x}",
                                     y1: "{line.min.y}",
                                     x2: "{line.max.x}",
@@ -257,7 +256,6 @@ pub fn LineChart<'a>(cx: Scope<'a, LineChartProps<'a>>) -> Element {
                         class: "{cx.props.class_grid_labels}",
                         labels.iter().map(|(text, label)| rsx! {
                             text {
-                                key: "{label}",
                                 dx: "{text.x}",
                                 dy: "{text.y}",
                                 text_anchor: "{text.anchor}",
@@ -306,10 +304,8 @@ pub fn LineChart<'a>(cx: Scope<'a, LineChartProps<'a>>) -> Element {
 
                     rsx! {
                         g {
-                            key: "{label}",
                             class: "{cx.props.class_line}-{i}",
                             path {
-                                key: "{cx.props.class_line_path}",
                                 d: "{commands}",
                                 class: "{cx.props.class_line_path}",
                                 stroke: "rgb({color_var}, 40, 40)",
@@ -320,7 +316,6 @@ pub fn LineChart<'a>(cx: Scope<'a, LineChartProps<'a>>) -> Element {
                             dots.iter().map(|d| {
                                 rsx! {
                                     line {
-                                        key: "{i}",
                                         x1: "{d.min.x}",
                                         y1: "{d.min.y}",
                                         x2: "{d.max.x}",

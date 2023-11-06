@@ -163,7 +163,7 @@ pub struct BarChartProps<'a> {
 /// group of grid labels.
 #[allow(non_snake_case)]
 pub fn BarChart<'a>(cx: Scope<'a, BarChartProps<'a>>) -> Element {
-    for series in &cx.props.series {
+    for series in cx.props.series.iter() {
         if series.is_empty() {
             return cx.render(rsx!("Bar chart error: empty series"));
         }
@@ -312,12 +312,10 @@ pub fn BarChart<'a>(cx: Scope<'a, BarChartProps<'a>>) -> Element {
                 view_box: "0 0 {cx.props.viewbox_width} {cx.props.viewbox_height}",
                 cx.props.show_grid.then(|| rsx! {
                     g {
-                        key: "grid",
                         class: "{cx.props.class_grid}",
                         lines.iter().map(|line| {
                             rsx! {
                                 line {
-                                    key: "{line.min}",
                                     x1: "{line.min.x}",
                                     y1: "{line.min.y}",
                                     x2: "{line.max.x}",
@@ -332,11 +330,9 @@ pub fn BarChart<'a>(cx: Scope<'a, BarChartProps<'a>>) -> Element {
                 }),
                 grid_labels.map(|labels| rsx! {
                     g {
-                        key: "grid_labels",
                         class: "{cx.props.class_grid_labels}",
                         labels.iter().map(|(text, label)| rsx! {
                             text {
-                                key: "{label}",
                                 dx: "{text.x}",
                                 dy: "{text.y}",
                                 text_anchor: "{text.anchor}",
@@ -349,11 +345,9 @@ pub fn BarChart<'a>(cx: Scope<'a, BarChartProps<'a>>) -> Element {
                 }),
                 grid_centered_labels.map(|labels| rsx! {
                     g {
-                        key: "grid_centered_labels",
                         class: "{cx.props.class_grid_labels}",
                         labels.iter().map(|(rect, label)| rsx! {
                             foreignObject {
-                                key: "{label}",
                                 x: "{rect.min.x}",
                                 y: "{rect.min.y}",
                                 width: "{rect.max.x}",
@@ -361,7 +355,6 @@ pub fn BarChart<'a>(cx: Scope<'a, BarChartProps<'a>>) -> Element {
                                 if cx.props.horizontal_bars {
                                     rsx! {
                                         span {
-                                            key: "{label}",
                                             class: "{cx.props.class_grid_label}",
                                             //width: "100%",
                                             height: "100%",
@@ -376,7 +369,6 @@ pub fn BarChart<'a>(cx: Scope<'a, BarChartProps<'a>>) -> Element {
                                 } else {
                                     rsx! {
                                         span {
-                                            key: "{label}",
                                             class: "{cx.props.class_grid_label}",
                                             width: "100%",
                                             height: "100%",
@@ -397,13 +389,11 @@ pub fn BarChart<'a>(cx: Scope<'a, BarChartProps<'a>>) -> Element {
 
                         rsx! {
                             g {
-                                key: "{i}",
                                 class: "{cx.props.class_bar_group}-{i}",
                                 {
                                     series_rects.iter().map(|rect| {
                                         rsx! {
                                             line {
-                                                key: "{rect}",
                                                 x1: "{rect.min.x}",
                                                 y1: "{rect.min.y}",
                                                 x2: "{rect.max.x}",
@@ -428,7 +418,6 @@ pub fn BarChart<'a>(cx: Scope<'a, BarChartProps<'a>>) -> Element {
 
                             rsx! {
                                 g {
-                                    key: "{i}",
                                     class: "{cx.props.class_bar_group}-{i}",
                                     tick_centers
                                         .iter()
@@ -470,7 +459,6 @@ pub fn BarChart<'a>(cx: Scope<'a, BarChartProps<'a>>) -> Element {
 
                                         rsx! {
                                             line {
-                                                key: "{v}",
                                                 x1: "{rect.min.x}",
                                                 y1: "{rect.min.y}",
                                                 x2: "{rect.max.x}",
@@ -482,7 +470,6 @@ pub fn BarChart<'a>(cx: Scope<'a, BarChartProps<'a>>) -> Element {
                                             cx.props.show_series_labels.then(|| {
                                                 rsx! {
                                                     text {
-                                                        key: "{bar_label}",
                                                         dx: "{text.x}",
                                                         dy: "{text.y}",
                                                         text_anchor: "{text.anchor}",

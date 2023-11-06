@@ -206,7 +206,6 @@ pub fn PieChart<'a>(cx: Scope<'a, PieChartProps<'a>>) -> Element {
 
                         let element = rsx! {
                             g {
-                                key: "{class_index}",
                                 class: "{cx.props.class_series} {cx.props.class_series}-{class_index}",
                                 path {
                                     d: "{dpath}",
@@ -234,7 +233,6 @@ pub fn PieChart<'a>(cx: Scope<'a, PieChartProps<'a>>) -> Element {
                                 if position.x > 0.0 {
                                     Some(rsx! {
                                         text {
-                                            key: "{label}",
                                             dx: "{position.x}",
                                             dy: "{position.y}",
                                             text_anchor: "middle",
@@ -262,7 +260,6 @@ pub fn PieChart<'a>(cx: Scope<'a, PieChartProps<'a>>) -> Element {
                                 if position.x > 0.0 {
                                     Some(rsx! {
                                         text {
-                                            key: "label",
                                             dx: "{position.x}",
                                             dy: "{position.y}",
                                             text_anchor: "middle",
