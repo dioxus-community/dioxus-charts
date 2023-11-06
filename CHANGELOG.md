@@ -8,7 +8,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased] - ReleaseDate
 
+### Fixed
+
+- Updated to Dioxus 0.4.0
+
 ## [0.1.2] - 2023-06-03
+
+### Fixed
+
+- Updated to Dioxus 0.3.2
+
 ## [0.1.1] - 2023-02-17
 
 ### Added
