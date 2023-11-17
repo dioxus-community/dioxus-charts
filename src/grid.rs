@@ -69,7 +69,7 @@ impl Axis {
 
         for i in 0..self.steps {
             let w = self.step_to_world(i as f32);
-            let v = self.world_to_view(w as f32, 0.0);
+            let v = self.world_to_view(w, 0.0);
 
             match self.direction {
                 Direction::Vertical => {
@@ -103,8 +103,8 @@ impl Axis {
             let p = i - 1;
             let w1 = self.step_to_world(p as f32);
             let w2 = self.step_to_world(i as f32);
-            let v1 = self.world_to_view(w1 as f32, 0.0);
-            let v2 = self.world_to_view(w2 as f32, 0.0);
+            let v1 = self.world_to_view(w1, 0.0);
+            let v2 = self.world_to_view(w2, 0.0);
             let center = (v1 + v2) / 2.0;
 
             match self.direction {
@@ -132,8 +132,8 @@ impl Axis {
             let p = i - 1;
             let w1 = self.step_to_world(p as f32);
             let w2 = self.step_to_world(i as f32);
-            let v1 = self.world_to_view(w1 as f32, 0.0);
-            let v2 = self.world_to_view(w2 as f32, 0.0);
+            let v1 = self.world_to_view(w1, 0.0);
+            let v2 = self.world_to_view(w2, 0.0);
 
             match self.direction {
                 Direction::Vertical => {
@@ -163,7 +163,7 @@ impl Axis {
 
         for i in 0..n_labels {
             let w = self.step_to_world(i as f32);
-            let v = self.world_to_view(w as f32, 0.0);
+            let v = self.world_to_view(w, 0.0);
 
             match self.direction {
                 Direction::Vertical => {
