@@ -51,35 +51,32 @@ fn app(cx: Scope) -> Element {
 }
  ```
 
-There is also a couple of examples in the `examples` folder with a `Makefile.toml` that makes it easier
-to build them. You need to install cargo-make first to make use of them:
-
-```sh
-cargo install cargo-make
-```
 
 You will also need to have [`sass`](https://sass-lang.com/) and [`tailwindcss`](https://tailwindcss.com/)
 installed in your system for the make commands to generate the css files.
 
-Then for the desktop demo, inside the examples folder:
+Then for the desktop demo;
 
 ```sh
-cd examples
-cargo make desktop
+dx serve desktop --platform desktop
 ```
 
 The web example was used to generate the [demo site](https://hiltonm.github.io/dioxus-charts-demo/).
 To test it out yourself you need to have `trunk` for the dev-server and the rust wasm target installed:
 
 ```sh
-cargo install trunk
 rustup target add wasm32-unknown-unknown
 ```
 
-Then build and launch the dev-server inside the examples folder:
+Then build and launch the dev-server;
 
 ```sh
-cargo make web
+dx server web --platform web
+```
+
+If changing css, run the following
+```sh
+npx tailwindcss -i ./input.css -o ./public/tailwind.css
 ```
 
 Note: if you get hit by an error when the web example launches, its possible you were blessed by a version

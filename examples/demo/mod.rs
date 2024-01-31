@@ -1,13 +1,10 @@
 use dioxus::prelude::*;
 
 use dioxus_charts::charts::pie::LabelPosition;
-use dioxus_charts::{BarChart, LineChart, PieChart};
+use dioxus_charts::{BarChart, LineChart, PieChart, RadarChart};
 
 pub fn demo_element<'a>(cx: Scope<'a>) -> Element<'a> {
     cx.render(rsx! {
-        style {
-            include_str!("./custom.css")
-        },
         div {
             class: "bg-gray-600",
             div {
@@ -284,6 +281,22 @@ pub fn demo_element<'a>(cx: Scope<'a>) -> Element<'a> {
                         h3 {
                             class: "truncate tracking-tight text-sm text-gray-200",
                             "8 biggest amusement parks in the world"
+                        }
+                    }
+
+                    div {
+                        class: "inline-grid grid-cols-1 gap-y-2",
+                        div {
+                            class: "aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-300 xl:aspect-w-7 xl:aspect-h-8",
+                            RadarChart {
+                                size: "100%",
+                                series: vec![90.0, 70.0, 75.0, 65.0, 80.0, 70.0],
+                                labels: vec!["HP".into(), "Attack".into(), "Defense".into(), "Sp. Atk".into(), "Sp. Def".into(), "Speed".into()],
+                            }
+                        }
+                        h3 {
+                            class: "truncate tracking-tight text-sm text-gray-200",
+                            "Radar Chart: pokemon stats"
                         }
                     }
                 }
