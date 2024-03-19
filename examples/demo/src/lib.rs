@@ -3,10 +3,10 @@ use dioxus::prelude::*;
 use dioxus_charts::charts::pie::LabelPosition;
 use dioxus_charts::{BarChart, LineChart, PieChart};
 
-pub fn demo_element<'a>(cx: Scope<'a>) -> Element<'a> {
-    cx.render(rsx! {
+pub fn demo_element() -> Element {
+    rsx! {
         style {
-            include_str!("./custom.css")
+            //include_str!("./custom.css"),
         },
         div {
             class: "bg-gray-600",
@@ -289,5 +289,5 @@ pub fn demo_element<'a>(cx: Scope<'a>) -> Element<'a> {
                 }
             }
         }
-    })
+    }
 }
