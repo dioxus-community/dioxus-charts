@@ -89,7 +89,7 @@ pub struct BarChartProps {
 /// use dioxus::prelude::*;
 /// use dioxus_charts::BarChart;
 ///
-/// fn app(cx: Scope) -> Element {
+/// fn app() -> Element {
 ///     rsx! {
 ///         BarChart {
 ///             padding_top: 30,
@@ -301,32 +301,29 @@ pub fn BarChart(props: BarChartProps) -> Element {
         None
     };
 
-    let stacked_bars_rects_rsx = stacked_bars_rects.map(|all_series_rects| {
-        all_series_rects.iter().enumerate().map(|(i, series_rects)| {
+    let mut all_series_rects_rsx = Vec::new();
+    while let Some(ref all_series_rects) = stacked_bars_rects {
+        for (i, series_rects) in all_series_rects.iter().enumerate() {
             color_var -= 75.0 * (1.0 / (i + 1) as f32);
 
-            rsx! {
+            all_series_rects_rsx.push(rsx! {
                 g {
                     class: "{props.class_bar_group}-{i}",
-                    {
-                        series_rects.iter().map(|rect| {
-                            rsx! {
-                                line {
-                                    x1: "{rect.min.x}",
-                                    y1: "{rect.min.y}",
-                                    x2: "{rect.max.x}",
-                                    y2: "{rect.max.y}",
-                                    class: "{props.class_bar}",
-                                    stroke: "rgb({color_var}, 40, 40)",
-                                    stroke_width: "{props.bar_width}",
-                                }
-                            }
-                        })
+                    for rect in series_rects {
+                        line {
+                            x1: "{rect.min.x}",
+                            y1: "{rect.min.y}",
+                            x2: "{rect.max.x}",
+                            y2: "{rect.max.y}",
+                            class: "{props.class_bar}",
+                            stroke: "rgb({color_var}, 40, 40)",
+                            stroke_width: "{props.bar_width}",
+                        } 
                     }
                 }
-            }
-        })
-    });
+            });
+        }
+    }
 
     let series_rsx = props.series.iter().enumerate().map(|(i, a)| {
         color_var -= 75.0 * (1.0 / (i + 1) as f32);
@@ -482,7 +479,8 @@ pub fn BarChart(props: BarChartProps) -> Element {
                     }
                 },
 
-                {stacked_bars_rects_rsx}
+                {all_series_rects_rsx.iter()}
+                
 
                 if !props.stacked_bars {
                     {series_rsx}

@@ -5,18 +5,18 @@ use crate::types::*;
 
 /// The `LineChart` properties struct for the configuration of the line chart.
 #[allow(clippy::struct_excessive_bools)]
-#[derive(PartialEq, Props)]
-pub struct LineChartProps<'a> {
+#[derive(Clone, PartialEq, Props)]
+pub struct LineChartProps {
     series: Series,
     #[props(optional)]
     labels: Option<Labels>,
     #[props(optional)]
     series_labels: Option<Labels>,
 
-    #[props(default = "100%")]
-    width: &'a str,
-    #[props(default = "100%")]
-    height: &'a str,
+    #[props(default = "100%".to_string(), into)]
+    width: String,
+    #[props(default = "100%".to_string(), into)]
+    height: String,
     #[props(default = 600)]
     viewbox_width: i32,
     #[props(default = 400)]
@@ -46,10 +46,10 @@ pub struct LineChartProps<'a> {
     #[props(default = true)]
     show_line_labels: bool,
 
-    #[props(default = "1%")]
-    line_width: &'a str,
-    #[props(default = "3%")]
-    dot_size: &'a str,
+    #[props(default = "1%".to_string(), into)]
+    line_width: String,
+    #[props(default = "3%".to_string(), into)]
+    dot_size: String,
     #[props(optional)]
     label_interpolation: Option<fn(f32) -> String>,
 
@@ -60,24 +60,24 @@ pub struct LineChartProps<'a> {
     #[props(default = 8)]
     max_ticks: i32,
 
-    #[props(default = "dx-chart-line")]
-    class_chart_line: &'a str,
-    #[props(default = "dx-line")]
-    class_line: &'a str,
-    #[props(default = "dx-line-path")]
-    class_line_path: &'a str,
-    #[props(default = "dx-line-dot")]
-    class_line_dot: &'a str,
-    #[props(default = "dx-line-label")]
-    class_line_label: &'a str,
-    #[props(default = "dx-grid")]
-    class_grid: &'a str,
-    #[props(default = "dx-grid-line")]
-    class_grid_line: &'a str,
-    #[props(default = "dx-grid-label")]
-    class_grid_label: &'a str,
-    #[props(default = "dx-grid-labels")]
-    class_grid_labels: &'a str,
+    #[props(default = "dx-chart-line".to_string(), into)]
+    class_chart_line: String,
+    #[props(default = "dx-line".to_string(), into)]
+    class_line: String,
+    #[props(default = "dx-line-path".to_string(), into)]
+    class_line_path: String,
+    #[props(default = "dx-line-dot".to_string(), into)]
+    class_line_dot: String,
+    #[props(default = "dx-line-label".to_string(), into)]
+    class_line_label: String,
+    #[props(default = "dx-grid".to_string(), into)]
+    class_grid: String,
+    #[props(default = "dx-grid-line".to_string(), into)]
+    class_grid_line: String,
+    #[props(default = "dx-grid-label".to_string(), into)]
+    class_grid_label: String,
+    #[props(default = "dx-grid-labels".to_string(), into)]
+    class_grid_labels: String,
 }
 
 /// This is the `LineChart` function used to render the line chart `Element`.
@@ -90,8 +90,8 @@ pub struct LineChartProps<'a> {
 /// use dioxus::prelude::*;
 /// use dioxus_charts::LineChart;
 ///
-/// fn app(cx: Scope) -> Element {
-///     cx.render(rsx! {
+/// fn app() -> Element {
+///     rsx! {
 ///         LineChart {
 ///             padding_top: 30,
 ///             padding_left: 65,
@@ -107,7 +107,7 @@ pub struct LineChartProps<'a> {
 ///             labels: vec!["2020A".into(), "2021E".into(), "2022E".into(), "2023E".into(), "2024E".into()],
 ///             series_labels: vec!["Disney".into(), "Comcast".into(), "Warner".into(), "Netflix".into()],
 ///         }
-///     })
+///     }
 /// }
 /// ```
 ///
@@ -162,42 +162,42 @@ pub struct LineChartProps<'a> {
 /// - `class_grid_labels`: &[str] (default: `"dx-grid-labels"`): The HTML element `class` of the
 /// group of grid labels.
 #[allow(non_snake_case)]
-pub fn LineChart<'a>(cx: Scope<'a, LineChartProps<'a>>) -> Element {
-    for series in cx.props.series.iter() {
+pub fn LineChart(props: LineChartProps) -> Element {
+    for series in props.series.iter() {
         if series.is_empty() {
-            return cx.render(rsx!("Line chart error: empty series"));
+            return rsx!("Line chart error: empty series");
         }
     }
 
     let view = Rect::new(
-        cx.props.padding_left as f32,
-        cx.props.padding_top as f32,
-        (cx.props.viewbox_width - cx.props.padding_right) as f32,
-        (cx.props.viewbox_height - cx.props.padding_bottom) as f32,
+        props.padding_left as f32,
+        props.padding_top as f32,
+        (props.viewbox_width - props.padding_right) as f32,
+        (props.viewbox_height - props.padding_bottom) as f32,
     );
 
-    let max_ticks = cx.props.max_ticks.max(3);
+    let max_ticks = props.max_ticks.max(3);
 
     let axis_x = Axis::builder()
         .with_view(view)
-        .with_grid_ticks(cx.props.show_grid_ticks)
-        .with_labels(cx.props.labels.as_ref());
+        .with_grid_ticks(props.show_grid_ticks)
+        .with_labels(props.labels.as_ref());
 
     let axis_y = Axis::builder()
         .with_view(view)
         .with_max_ticks(max_ticks)
-        .with_grid_ticks(cx.props.show_grid_ticks)
-        .with_series(&cx.props.series)
-        .with_label_interpolation(cx.props.label_interpolation)
-        .with_highest(cx.props.highest)
-        .with_lowest(cx.props.lowest);
+        .with_grid_ticks(props.show_grid_ticks)
+        .with_series(&props.series)
+        .with_label_interpolation(props.label_interpolation)
+        .with_highest(props.highest)
+        .with_lowest(props.lowest);
 
     let grid = Grid::new(axis_x, axis_y);
     let lines = grid.lines();
     let generated_labels = grid.y.generated_labels();
 
-    let grid_labels = if cx.props.show_labels {
-        if let Some(labels) = cx.props.labels.as_ref() {
+    let grid_labels = if props.show_labels {
+        if let Some(labels) = props.labels.as_ref() {
             Some(
                 grid.text_data(Some(labels.len()), Some(generated_labels.len()))
                     .into_iter()
@@ -218,131 +218,135 @@ pub fn LineChart<'a>(cx: Scope<'a, LineChartProps<'a>>) -> Element {
     };
 
     let mut color_var = 255.0;
-    let dotted_stroke = if cx.props.show_dotted_grid {
+    let dotted_stroke = if props.show_dotted_grid {
         &"2px"
     } else {
         &"0px"
     };
 
-    cx.render(rsx! {
+    let string_binding = String::new();
+    let vec_binding = vec![];
+    
+    let series_rsx = props
+        .series
+        .iter()
+        .enumerate()
+        .zip(
+            props
+                .series_labels
+                .as_ref()
+                .unwrap_or(&vec_binding)
+                .iter()
+                .chain(std::iter::repeat(&string_binding)),
+        )
+        .map(|((i, a), label)| {
+            let mut commands = Vec::<String>::with_capacity(a.len());
+            let mut dots = Vec::<Rect>::with_capacity(a.len());
+            let mut text_point: Option<Point> = None;
+
+            color_var -= 75.0 * (1.0 / (i + 1) as f32);
+
+            for (index, v) in a.iter().enumerate() {
+                let point = grid.world_to_view(index as f32, *v, false);
+
+                if index == 0 {
+                    commands.push(format!("M{},{}", point.x, point.y));
+                } else {
+                    commands.push(format!("L{},{}", point.x, point.y));
+                }
+
+                if props.show_dots {
+                    dots.push(Rect::new(point.x, point.y, point.x + 0.1, point.y));
+                }
+
+                if !label.is_empty() && index == (a.len() - 1) {
+                    text_point = Some(point);
+                }
+            }
+
+            let commands = commands.join(" ");
+
+            rsx! {
+                g {
+                    class: "{props.class_line}-{i}",
+                    path {
+                        d: "{commands}",
+                        class: "{props.class_line_path}",
+                        stroke: "rgb({color_var}, 40, 40)",
+                        stroke_width: "{props.line_width}",
+                        stroke_linecap: "round",
+                        fill: "transparent",
+                    },
+                    for d in dots {
+                        line {
+                            x1: "{d.min.x}",
+                            y1: "{d.min.y}",
+                            x2: "{d.max.x}",
+                            y2: "{d.max.y}",
+                            class: "{props.class_line_dot}",
+                            stroke: "rgb({color_var}, 40, 40)",
+                            stroke_width: "{props.dot_size}",
+                            stroke_linecap: "round",
+                        }
+                    }
+                    for point in text_point {
+                        text {
+                            dx: format_args!("{}", point.x + 10.0),
+                            dy: "{point.y}",
+                            text_anchor: "start",
+                            color: "rgb({color_var}, 40, 40)",
+                            class: "{props.class_line_label}",
+                            "{label}"
+                        }
+                    }
+                }
+            }
+        });
+
+    rsx! {
         div {
             svg {
                 xmlns: "http://www.w3.org/2000/svg",
-                width: "{cx.props.width}",
-                height: "{cx.props.height}",
-                class: "{cx.props.class_chart_line}",
+                width: "{props.width}",
+                height: "{props.height}",
+                class: "{props.class_chart_line}",
                 preserve_aspect_ratio: "xMidYMid meet",
-                view_box: "0 0 {cx.props.viewbox_width} {cx.props.viewbox_height}",
-                cx.props.show_grid.then(|| rsx! {
+                view_box: "0 0 {props.viewbox_width} {props.viewbox_height}",
+                if props.show_grid {
                     g {
-                        class: "{cx.props.class_grid}",
-                        lines.iter().map(|line| {
-                            rsx! {
-                                line {
-                                    x1: "{line.min.x}",
-                                    y1: "{line.min.y}",
-                                    x2: "{line.max.x}",
-                                    y2: "{line.max.y}",
-                                    class: "{cx.props.class_grid_line}",
-                                    stroke: "rgba(20, 20, 20, 0.8)",
-                                    stroke_dasharray: "{dotted_stroke}",
-                                }
+                        class: "{props.class_grid}",
+                        for line in lines {
+                            line {
+                                x1: "{line.min.x}",
+                                y1: "{line.min.y}",
+                                x2: "{line.max.x}",
+                                y2: "{line.max.y}",
+                                class: "{props.class_grid_line}",
+                                stroke: "rgba(20, 20, 20, 0.8)",
+                                stroke_dasharray: "{dotted_stroke}",
                             }
-                        }),
+                        }
                     }
-                }),
-                grid_labels.map(|labels| rsx! {
+                }
+
+                for labels in grid_labels {
                     g {
-                        class: "{cx.props.class_grid_labels}",
-                        labels.iter().map(|(text, label)| rsx! {
+                        class: "{props.class_grid_labels}",
+                        for (text, label) in labels {
                             text {
                                 dx: "{text.x}",
                                 dy: "{text.y}",
                                 text_anchor: "{text.anchor}",
-                                class: "{cx.props.class_grid_label}",
+                                class: "{props.class_grid_label}",
                                 alignment_baseline: "{text.baseline}",
-                                label.as_str()
+                                "{label}"
                             }
-                        })
-                    }
-                }),
-                cx.props.series
-                    .iter()
-                    .enumerate()
-                    .zip(cx.props.series_labels
-                        .as_ref()
-                        .unwrap_or(&vec!())
-                        .iter()
-                        .chain(std::iter::repeat(&"".to_owned())))
-                    .map(|((i, a), label)| {
-
-                    let mut commands = Vec::<String>::with_capacity(a.len());
-                    let mut dots = Vec::<Rect>::with_capacity(a.len());
-                    let mut text_point: Option<Point> = None;
-
-                    color_var -= 75.0 * (1.0 / (i + 1) as f32);
-
-                    for (index, v) in a.iter().enumerate() {
-                        let point = grid.world_to_view(index as f32, *v, false);
-
-                        if index == 0 {
-                            commands.push(format!("M{},{}", point.x, point.y));
-                        } else {
-                            commands.push(format!("L{},{}", point.x, point.y));
-                        }
-
-                        if cx.props.show_dots {
-                            dots.push(Rect::new(point.x, point.y, point.x + 0.1, point.y));
-                        }
-
-                        if !label.is_empty() && index == (a.len() - 1) {
-                            text_point = Some(point);
                         }
                     }
+                }
 
-                    let commands = commands.join(" ");
-
-                    rsx! {
-                        g {
-                            class: "{cx.props.class_line}-{i}",
-                            path {
-                                d: "{commands}",
-                                class: "{cx.props.class_line_path}",
-                                stroke: "rgb({color_var}, 40, 40)",
-                                stroke_width: "{cx.props.line_width}",
-                                stroke_linecap: "round",
-                                fill: "transparent",
-                            },
-                            dots.iter().map(|d| {
-                                rsx! {
-                                    line {
-                                        x1: "{d.min.x}",
-                                        y1: "{d.min.y}",
-                                        x2: "{d.max.x}",
-                                        y2: "{d.max.y}",
-                                        class: "{cx.props.class_line_dot}",
-                                        stroke: "rgb({color_var}, 40, 40)",
-                                        stroke_width: "{cx.props.dot_size}",
-                                        stroke_linecap: "round",
-                                    }
-                                }
-                            }),
-                            text_point.map(|point| {
-                                rsx! {
-                                    text {
-                                        dx: format_args!("{}", point.x + 10.0),
-                                        dy: "{point.y}",
-                                        text_anchor: "start",
-                                        color: "rgb({color_var}, 40, 40)",
-                                        class: "{cx.props.class_line_label}",
-                                        label.as_str()
-                                    }
-                                }
-                            }),
-                        }
-                    }
-                }),
+                {series_rsx}
             }
         }
-    })
+    }
 }
