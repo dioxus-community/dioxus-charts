@@ -98,7 +98,7 @@ pub struct BarChartProps {
 ///             padding_bottom: 30,
 ///             bar_width: "10%",
 ///             horizontal_bars: true,
-///             label_interpolation: |v| format!("{v:.1}%"),
+///             label_interpolation: (|v| format!("{v:.1}%")) as fn(f32) -> String,
 ///             series: vec![
 ///                 vec![63.0, 14.4, 8.0, 5.1, 1.8],
 ///             ],
@@ -301,6 +301,37 @@ pub fn BarChart(props: BarChartProps) -> Element {
         None
     };
 
+    let stacked_bars_rects_rsx = stacked_bars_rects.map(|all_series_rects| {
+        rsx! {
+            //all_series_rects.iter().enumerate().map(|(i, series_rects)| {
+            for (i, series_rects) in all_series_rects.iter().enumerate() {
+                {color_var -= 75.0 * (1.0 / (i + 1) as f32);}
+
+                g {
+                    class: "{props.class_bar_group}-{i}",
+                    {
+                        series_rects.iter().map(|rect| {
+                            rsx! {
+                                line {
+                                    x1: "{rect.min.x}",
+                                    y1: "{rect.min.y}",
+                                    x2: "{rect.max.x}",
+                                    y2: "{rect.max.y}",
+                                    class: "{props.class_bar}",
+                                    stroke: "rgb({color_var}, 40, 40)",
+                                    stroke_width: "{props.bar_width}",
+                                }
+                            }
+                        })
+                    }
+                }
+            }
+        }
+    });
+
+    /*println!("HERE");
+    println!("{}", stacked_bars_rects.len());
+
     let mut all_series_rects_rsx = Vec::new();
     while let Some(ref all_series_rects) = stacked_bars_rects {
         for (i, series_rects) in all_series_rects.iter().enumerate() {
@@ -318,23 +349,21 @@ pub fn BarChart(props: BarChartProps) -> Element {
                             class: "{props.class_bar}",
                             stroke: "rgb({color_var}, 40, 40)",
                             stroke_width: "{props.bar_width}",
-                        } 
+                        }
                     }
                 }
             });
         }
     }
 
+    println!("STUCK");*/
+
     let series_rsx = props.series.iter().enumerate().map(|(i, a)| {
         color_var -= 75.0 * (1.0 / (i + 1) as f32);
         let offset = (i as f32 - (props.series.len() as f32 - 1.0) / 2.0) * props.bar_distance;
         let tick_centers = axis_label.tick_centers();
 
-        let tick_centers_rsx = tick_centers
-            .iter()
-            .zip(a.iter())
-            .map(|(point, v)| {
-
+        let tick_centers_rsx = tick_centers.iter().zip(a.iter()).map(|(point, v)| {
             let end = axis_value.world_to_view(*v, 0.0);
             let (rect, text) = if props.horizontal_bars {
                 (
@@ -343,8 +372,8 @@ pub fn BarChart(props: BarChartProps) -> Element {
                         x: end + 5.0,
                         y: point.y + offset,
                         anchor: "start",
-                        baseline: "middle"
-                    }
+                        baseline: "middle",
+                    },
                 )
             } else {
                 (
@@ -353,8 +382,8 @@ pub fn BarChart(props: BarChartProps) -> Element {
                         x: point.x + offset,
                         y: end - 5.0,
                         anchor: "middle",
-                        baseline: "text-bottom"
-                    }
+                        baseline: "text-bottom",
+                    },
                 )
             };
 
@@ -409,7 +438,7 @@ pub fn BarChart(props: BarChartProps) -> Element {
                 preserve_aspect_ratio: "xMidYMid meet",
                 view_box: "0 0 {props.viewbox_width} {props.viewbox_height}",
 
-                if props.show_grid { 
+                if props.show_grid {
                     g {
                         class: "{props.class_grid}",
                         for line in lines {
@@ -423,9 +452,9 @@ pub fn BarChart(props: BarChartProps) -> Element {
                                 stroke_dasharray: "{dotted_stroke}",
                             }
                         }
-                    }   
+                    }
                 },
-                
+
                 for labels in grid_labels {
                     g {
                         class: "{props.class_grid_labels}",
@@ -479,8 +508,8 @@ pub fn BarChart(props: BarChartProps) -> Element {
                     }
                 },
 
-                {all_series_rects_rsx.iter()}
-                
+                {stacked_bars_rects_rsx}
+
 
                 if !props.stacked_bars {
                     {series_rsx}

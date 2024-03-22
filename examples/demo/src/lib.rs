@@ -31,7 +31,7 @@ pub fn demo_element() -> Element {
                                 padding_bottom: 30,
                                 bar_width: "10%",
                                 horizontal_bars: true,
-                                label_interpolation: |v| format!("{v}%"),
+                                label_interpolation: (|v| format!("{v}%")) as fn(f32) -> String,
                                 series: vec![
                                     vec![63.0, 14.4, 8.0, 5.1, 1.8],
                                 ],
@@ -56,7 +56,7 @@ pub fn demo_element() -> Element {
                                 bar_distance: 25.0,
                                 horizontal_bars: true,
                                 label_size: 70,
-                                label_interpolation: |v| format!("${v:.0}B"),
+                                label_interpolation: (|v| format!("${v:.0}B")) as fn(f32) -> String,
                                 series: vec![
                                     vec![2901.0, 2522.0, 1917.0, 1691.0, 1061.0],
                                     vec![2307.0, 1640.0, 1125.0, 939.8, 668.8],
@@ -82,7 +82,7 @@ pub fn demo_element() -> Element {
                                 bar_width: "3.5%",
                                 bar_distance: 20.0,
                                 show_series_labels: false,
-                                label_interpolation: |v| format!("{v}%"),
+                                label_interpolation: (|v| format!("{v}%")) as fn(f32) -> String,
                                 label_size: 70,
                                 series: vec![
                                     vec![11.3, 4.3, 2.6, 1.7, 0.3],
@@ -107,7 +107,7 @@ pub fn demo_element() -> Element {
                                 padding_left: 40,
                                 padding_right: 30,
                                 padding_bottom: 30,
-                                label_interpolation: |v| format!("${v}"),
+                                label_interpolation: (|v| format!("${v}")) as fn(f32) -> String,
                                 show_series_labels: false,
                                 stacked_bars: true,
                                 series: vec![
@@ -134,7 +134,7 @@ pub fn demo_element() -> Element {
                                 padding_left: 65,
                                 padding_right: 80,
                                 padding_bottom: 30,
-                                label_interpolation: |v| format!("${v}B"),
+                                label_interpolation: (|v| format!("${v}B")) as fn(f32) -> String,
                                 series: vec![
                                     vec![29.0, 30.5, 32.6, 35.0, 37.5],
                                     vec![20.0, 25.1, 26.0, 25.2, 26.6],
@@ -164,7 +164,7 @@ pub fn demo_element() -> Element {
                                 padding_bottom: 30,
                                 show_grid_ticks: true,
                                 show_dotted_grid: false,
-                                label_interpolation: |v| format!("{v}%"),
+                                label_interpolation: (|v| format!("{v}%")) as fn(f32) -> String,
                                 series: vec![
                                     vec![75.77, 73.95, 74.56, 78.25, 77.15, 62.64, 67.51],
                                     vec![57.17, 57.78, 54.69, 52.95, 51.78, 41.0, 47.25],
@@ -239,7 +239,7 @@ pub fn demo_element() -> Element {
                                 donut: true,
                                 label_position: LabelPosition::Center,
                                 label_offset: 60.0,
-                                label_interpolation: |v| format!("{v}%"),
+                                label_interpolation: (|v| format!("{v}%")) as fn(f32) -> String,
                                 series: vec![50.0, 25.0, 25.0],
                             }
                         }
@@ -265,7 +265,7 @@ pub fn demo_element() -> Element {
                                 show_grid_ticks: true,
                                 show_dotted_grid: false,
                                 label_size: 90,
-                                label_interpolation: |v| format!("{v}km²"),
+                                label_interpolation: (|v| format!("{v}km²")) as fn(f32) -> String,
                                 series: vec![
                                     vec![150.0, 22.3, 13.5, 12.7, 3.7, 2.78, 2.5, 1.47],
                                 ],

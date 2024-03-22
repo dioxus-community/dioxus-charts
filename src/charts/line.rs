@@ -97,7 +97,7 @@ pub struct LineChartProps {
 ///             padding_left: 65,
 ///             padding_right: 80,
 ///             padding_bottom: 30,
-///             label_interpolation: |v| format!("${v:.0}B"),
+///             label_interpolation: (|v| format!("${v:.0}B")) as fn(f32) -> String,
 ///             series: vec![
 ///                 vec![29.0, 30.5, 32.6, 35.0, 37.5],
 ///                 vec![20.0, 25.1, 26.0, 25.2, 26.6],
