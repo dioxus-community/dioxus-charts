@@ -329,35 +329,6 @@ pub fn BarChart(props: BarChartProps) -> Element {
         }
     });
 
-    /*println!("HERE");
-    println!("{}", stacked_bars_rects.len());
-
-    let mut all_series_rects_rsx = Vec::new();
-    while let Some(ref all_series_rects) = stacked_bars_rects {
-        for (i, series_rects) in all_series_rects.iter().enumerate() {
-            color_var -= 75.0 * (1.0 / (i + 1) as f32);
-
-            all_series_rects_rsx.push(rsx! {
-                g {
-                    class: "{props.class_bar_group}-{i}",
-                    for rect in series_rects {
-                        line {
-                            x1: "{rect.min.x}",
-                            y1: "{rect.min.y}",
-                            x2: "{rect.max.x}",
-                            y2: "{rect.max.y}",
-                            class: "{props.class_bar}",
-                            stroke: "rgb({color_var}, 40, 40)",
-                            stroke_width: "{props.bar_width}",
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-    println!("STUCK");*/
-
     let series_rsx = props.series.iter().enumerate().map(|(i, a)| {
         color_var -= 75.0 * (1.0 / (i + 1) as f32);
         let offset = (i as f32 - (props.series.len() as f32 - 1.0) / 2.0) * props.bar_distance;
