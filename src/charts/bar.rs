@@ -5,16 +5,16 @@ use crate::types::*;
 
 /// The `BarChart` properties struct for the configuration of the bar chart.
 #[allow(clippy::struct_excessive_bools)]
-#[derive(PartialEq, Props)]
-pub struct BarChartProps<'a> {
+#[derive(Clone, PartialEq, Props)]
+pub struct BarChartProps {
     series: Series,
     #[props(optional)]
     labels: Option<Labels>,
 
-    #[props(default = "100%")]
-    width: &'a str,
-    #[props(default = "100%")]
-    height: &'a str,
+    #[props(default = "100%".to_string(), into)]
+    width: String,
+    #[props(default = "100%".to_string(), into)]
+    height: String,
     #[props(default = 600)]
     viewbox_width: i32,
     #[props(default = 400)]
@@ -52,8 +52,8 @@ pub struct BarChartProps<'a> {
     #[props(optional)]
     label_interpolation: Option<fn(f32) -> String>,
 
-    #[props(default = "5%")]
-    bar_width: &'a str,
+    #[props(default = "5%".to_string(), into)]
+    bar_width: String,
     #[props(default = 30.0)]
     bar_distance: f32,
     #[props(default = false)]
@@ -61,22 +61,22 @@ pub struct BarChartProps<'a> {
     #[props(default = false)]
     stacked_bars: bool,
 
-    #[props(default = "dx-chart-bar")]
-    class_chart_bar: &'a str,
-    #[props(default = "dx-bar")]
-    class_bar: &'a str,
-    #[props(default = "dx-bar-group")]
-    class_bar_group: &'a str,
-    #[props(default = "dx-bar-label")]
-    class_bar_label: &'a str,
-    #[props(default = "dx-grid")]
-    class_grid: &'a str,
-    #[props(default = "dx-grid-line")]
-    class_grid_line: &'a str,
-    #[props(default = "dx-grid-label")]
-    class_grid_label: &'a str,
-    #[props(default = "dx-grid-labels")]
-    class_grid_labels: &'a str,
+    #[props(default = "dx-chart-bar".to_string(), into)]
+    class_chart_bar: String,
+    #[props(default = "dx-bar".to_string(), into)]
+    class_bar: String,
+    #[props(default = "dx-bar-group".to_string(), into)]
+    class_bar_group: String,
+    #[props(default = "dx-bar-label".to_string(), into)]
+    class_bar_label: String,
+    #[props(default = "dx-grid".to_string(), into)]
+    class_grid: String,
+    #[props(default = "dx-grid-line".to_string(), into)]
+    class_grid_line: String,
+    #[props(default = "dx-grid-label".to_string(), into)]
+    class_grid_label: String,
+    #[props(default = "dx-grid-labels".to_string(), into)]
+    class_grid_labels: String,
 }
 
 /// This is the `BarChart` function used to render the bar chart `Element`.
@@ -89,8 +89,8 @@ pub struct BarChartProps<'a> {
 /// use dioxus::prelude::*;
 /// use dioxus_charts::BarChart;
 ///
-/// fn app(cx: Scope) -> Element {
-///     cx.render(rsx! {
+/// fn app() -> Element {
+///     rsx! {
 ///         BarChart {
 ///             padding_top: 30,
 ///             padding_left: 70,
@@ -98,13 +98,13 @@ pub struct BarChartProps<'a> {
 ///             padding_bottom: 30,
 ///             bar_width: "10%",
 ///             horizontal_bars: true,
-///             label_interpolation: |v| format!("{v:.1}%"),
+///             label_interpolation: (|v| format!("{v:.1}%")) as fn(f32) -> String,
 ///             series: vec![
 ///                 vec![63.0, 14.4, 8.0, 5.1, 1.8],
 ///             ],
 ///             labels: vec!["Chrome".into(), "Safari".into(), "IE/Edge".into(), "Firefox".into(), "Opera".into()]
 ///         }
-///     })
+///     }
 /// }
 /// ```
 ///
@@ -162,53 +162,53 @@ pub struct BarChartProps<'a> {
 /// - `class_grid_labels`: &[str] (default: `"dx-grid-labels"`): The HTML element `class` of the
 /// group of grid labels.
 #[allow(non_snake_case)]
-pub fn BarChart<'a>(cx: Scope<'a, BarChartProps<'a>>) -> Element {
-    for series in cx.props.series.iter() {
+pub fn BarChart(props: BarChartProps) -> Element {
+    for series in props.series.iter() {
         if series.is_empty() {
-            return cx.render(rsx!("Bar chart error: empty series"));
+            return rsx!("Bar chart error: empty series");
         }
     }
 
     let grid = {
         let view = Rect::new(
-            cx.props.padding_left as f32,
-            cx.props.padding_top as f32,
-            (cx.props.viewbox_width - cx.props.padding_right) as f32,
-            (cx.props.viewbox_height - cx.props.padding_bottom) as f32,
+            props.padding_left as f32,
+            props.padding_top as f32,
+            (props.viewbox_width - props.padding_right) as f32,
+            (props.viewbox_height - props.padding_bottom) as f32,
         );
 
-        let lowest = if let Some(low) = cx.props.lowest {
+        let lowest = if let Some(low) = props.lowest {
             low
         } else {
             0.0
         };
 
-        let max_ticks = cx.props.max_ticks.max(3);
+        let max_ticks = props.max_ticks.max(3);
 
         let axis_x = Axis::builder()
             .with_view(view)
-            .with_grid_ticks(cx.props.show_grid_ticks)
-            .with_label_size(cx.props.label_size)
-            .with_centered_labels(cx.props.labels.as_ref());
+            .with_grid_ticks(props.show_grid_ticks)
+            .with_label_size(props.label_size)
+            .with_centered_labels(props.labels.as_ref());
 
         let axis_y = Axis::builder()
             .with_view(view)
             .with_max_ticks(max_ticks)
-            .with_grid_ticks(cx.props.show_grid_ticks)
-            .with_series(&cx.props.series)
-            .with_stacked_series(cx.props.stacked_bars)
-            .with_label_interpolation(cx.props.label_interpolation)
-            .with_highest(cx.props.highest)
+            .with_grid_ticks(props.show_grid_ticks)
+            .with_series(&props.series)
+            .with_stacked_series(props.stacked_bars)
+            .with_label_interpolation(props.label_interpolation)
+            .with_highest(props.highest)
             .with_lowest(Some(lowest));
 
-        if cx.props.horizontal_bars {
+        if props.horizontal_bars {
             Grid::new(axis_y, axis_x)
         } else {
             Grid::new(axis_x, axis_y)
         }
     };
 
-    let (axis_value, axis_label) = if cx.props.horizontal_bars {
+    let (axis_value, axis_label) = if props.horizontal_bars {
         (&grid.x, &grid.y)
     } else {
         (&grid.y, &grid.x)
@@ -217,14 +217,14 @@ pub fn BarChart<'a>(cx: Scope<'a, BarChartProps<'a>>) -> Element {
     let lines = grid.lines();
 
     let mut color_var = 255.0;
-    let dotted_stroke = if cx.props.show_dotted_grid {
+    let dotted_stroke = if props.show_dotted_grid {
         &"2px"
     } else {
         &"0px"
     };
     let generated_labels = axis_value.generated_labels();
 
-    let grid_labels = if cx.props.show_labels {
+    let grid_labels = if props.show_labels {
         Some(
             axis_value
                 .text_data(generated_labels.len())
@@ -236,18 +236,18 @@ pub fn BarChart<'a>(cx: Scope<'a, BarChartProps<'a>>) -> Element {
         None
     };
 
-    let grid_centered_labels = if cx.props.show_labels {
+    let grid_centered_labels = if props.show_labels {
         let rects = axis_label
-            .centered_text_rects(cx.props.labels.as_ref().unwrap().len() as i32)
+            .centered_text_rects(props.labels.as_ref().unwrap().len() as i32)
             .into_iter();
 
-        let labels = if cx.props.horizontal_bars {
+        let labels = if props.horizontal_bars {
             rects
-                .zip(cx.props.labels.as_ref().unwrap().iter().rev())
+                .zip(props.labels.as_ref().unwrap().iter().rev())
                 .collect::<Vec<(Rect, &String)>>()
         } else {
             rects
-                .zip(cx.props.labels.as_ref().unwrap().iter())
+                .zip(props.labels.as_ref().unwrap().iter())
                 .collect::<Vec<(Rect, &String)>>()
         };
 
@@ -256,12 +256,12 @@ pub fn BarChart<'a>(cx: Scope<'a, BarChartProps<'a>>) -> Element {
         None
     };
 
-    let stacked_bars_rects = if cx.props.stacked_bars {
+    let stacked_bars_rects = if props.stacked_bars {
         let tick_centers = axis_label.tick_centers();
         let mut all_series_rects = Vec::<Vec<Rect>>::new();
         let mut last_bar_ends: Option<Vec<f32>> = None;
 
-        for a in cx.props.series.iter() {
+        for a in props.series.iter() {
             let mut rects = Vec::<Rect>::new();
             let mut view_bar_ends = Vec::<f32>::new();
 
@@ -273,7 +273,7 @@ pub fn BarChart<'a>(cx: Scope<'a, BarChartProps<'a>>) -> Element {
 
                     let last_end = axis_value.world_to_view(last_end, 0.0);
 
-                    if cx.props.horizontal_bars {
+                    if props.horizontal_bars {
                         Rect::new(last_end, point.y, end, point.y)
                     } else {
                         Rect::new(point.x, last_end, point.x, end)
@@ -282,7 +282,7 @@ pub fn BarChart<'a>(cx: Scope<'a, BarChartProps<'a>>) -> Element {
                     let end = axis_value.world_to_view(*v, 0.0);
                     view_bar_ends.push(*v);
 
-                    if cx.props.horizontal_bars {
+                    if props.horizontal_bars {
                         Rect::new(point.x, point.y, end, point.y)
                     } else {
                         Rect::new(point.x, point.y, point.x, end)
@@ -301,192 +301,191 @@ pub fn BarChart<'a>(cx: Scope<'a, BarChartProps<'a>>) -> Element {
         None
     };
 
-    cx.render(rsx! {
+    let stacked_bars_rects_rsx = stacked_bars_rects.map(|all_series_rects| {
+        rsx! {
+            //all_series_rects.iter().enumerate().map(|(i, series_rects)| {
+            for (i, series_rects) in all_series_rects.iter().enumerate() {
+                {color_var -= 75.0 * (1.0 / (i + 1) as f32);}
+
+                g {
+                    class: "{props.class_bar_group}-{i}",
+                    {
+                        series_rects.iter().map(|rect| {
+                            rsx! {
+                                line {
+                                    x1: "{rect.min.x}",
+                                    y1: "{rect.min.y}",
+                                    x2: "{rect.max.x}",
+                                    y2: "{rect.max.y}",
+                                    class: "{props.class_bar}",
+                                    stroke: "rgb({color_var}, 40, 40)",
+                                    stroke_width: "{props.bar_width}",
+                                }
+                            }
+                        })
+                    }
+                }
+            }
+        }
+    });
+
+    let series_rsx = props.series.iter().enumerate().map(|(i, a)| {
+        color_var -= 75.0 * (1.0 / (i + 1) as f32);
+        let offset = (i as f32 - (props.series.len() as f32 - 1.0) / 2.0) * props.bar_distance;
+        let tick_centers = axis_label.tick_centers();
+
+        let tick_centers_rsx = tick_centers.iter().zip(a.iter()).map(|(point, v)| {
+            let end = axis_value.world_to_view(*v, 0.0);
+            let (rect, text) = if props.horizontal_bars {
+                (
+                    Rect::new(point.x, point.y + offset, end, point.y + offset),
+                    TextData {
+                        x: end + 5.0,
+                        y: point.y + offset,
+                        anchor: "start",
+                        baseline: "middle",
+                    },
+                )
+            } else {
+                (
+                    Rect::new(point.x + offset, point.y, point.x + offset, end),
+                    TextData {
+                        x: point.x + offset,
+                        y: end - 5.0,
+                        anchor: "middle",
+                        baseline: "text-bottom",
+                    },
+                )
+            };
+
+            let bar_label = {
+                if !props.show_series_labels {
+                    String::new()
+                } else if let Some(func) = props.label_interpolation {
+                    func(*v)
+                } else {
+                    format!("{}", *v)
+                }
+            };
+
+            rsx! {
+                line {
+                    x1: "{rect.min.x}",
+                    y1: "{rect.min.y}",
+                    x2: "{rect.max.x}",
+                    y2: "{rect.max.y}",
+                    class: "{props.class_bar}",
+                    stroke: "rgb({color_var}, 40, 40)",
+                    stroke_width: "{props.bar_width}",
+                },
+                if props.show_series_labels {
+                    text {
+                        dx: "{text.x}",
+                        dy: "{text.y}",
+                        text_anchor: "{text.anchor}",
+                        class: "{props.class_bar_label}",
+                        alignment_baseline: "{text.baseline}",
+                        "{bar_label}"
+                    }
+                },
+            }
+        });
+
+        rsx! {
+            g {
+                class: "{props.class_bar_group}-{i}",
+                {tick_centers_rsx}
+            }
+        }
+    });
+
+    rsx! {
         div {
             svg {
                 xmlns: "http://www.w3.org/2000/svg",
-                width: "{cx.props.width}",
-                height: "{cx.props.height}",
-                class: "{cx.props.class_chart_bar}",
+                width: "{props.width}",
+                height: "{props.height}",
+                class: "{props.class_chart_bar}",
                 preserve_aspect_ratio: "xMidYMid meet",
-                view_box: "0 0 {cx.props.viewbox_width} {cx.props.viewbox_height}",
-                cx.props.show_grid.then(|| rsx! {
+                view_box: "0 0 {props.viewbox_width} {props.viewbox_height}",
+
+                if props.show_grid {
                     g {
-                        class: "{cx.props.class_grid}",
-                        lines.iter().map(|line| {
-                            rsx! {
-                                line {
-                                    x1: "{line.min.x}",
-                                    y1: "{line.min.y}",
-                                    x2: "{line.max.x}",
-                                    y2: "{line.max.y}",
-                                    class: "{cx.props.class_grid_line}",
-                                    stroke: "rgba(20, 20, 20, 0.8)",
-                                    stroke_dasharray: "{dotted_stroke}",
-                                }
+                        class: "{props.class_grid}",
+                        for line in lines {
+                            line {
+                                x1: "{line.min.x}",
+                                y1: "{line.min.y}",
+                                x2: "{line.max.x}",
+                                y2: "{line.max.y}",
+                                class: "{props.class_grid_line}",
+                                stroke: "rgba(20, 20, 20, 0.8)",
+                                stroke_dasharray: "{dotted_stroke}",
                             }
-                        }),
+                        }
                     }
-                }),
-                grid_labels.map(|labels| rsx! {
+                },
+
+                for labels in grid_labels {
                     g {
-                        class: "{cx.props.class_grid_labels}",
-                        labels.iter().map(|(text, label)| rsx! {
+                        class: "{props.class_grid_labels}",
+                        for (text, label) in labels {
                             text {
                                 dx: "{text.x}",
                                 dy: "{text.y}",
                                 text_anchor: "{text.anchor}",
-                                class: "{cx.props.class_grid_label}",
+                                class: "{props.class_grid_label}",
                                 alignment_baseline: "{text.baseline}",
-                                label.as_str()
+                                "{label}"
                             }
-                        })
+                        }
                     }
-                }),
-                grid_centered_labels.map(|labels| rsx! {
+                },
+
+                for labels in grid_centered_labels {
                     g {
-                        class: "{cx.props.class_grid_labels}",
-                        labels.iter().map(|(rect, label)| rsx! {
+                        class: "{props.class_grid_labels}",
+                        for (rect, label) in labels {
                             foreignObject {
                                 x: "{rect.min.x}",
                                 y: "{rect.min.y}",
                                 width: "{rect.max.x}",
                                 height: "{rect.max.y}",
-                                if cx.props.horizontal_bars {
-                                    rsx! {
-                                        span {
-                                            class: "{cx.props.class_grid_label}",
-                                            //width: "100%",
-                                            height: "100%",
-                                            display: "inline-flex",
-                                            align_items: "center",
-                                            line_height: "1",
-                                            float: "right",
-                                            text_align: "right",
-                                            label.as_str()
-                                        }
+                                if props.horizontal_bars {
+                                    span {
+                                        class: "{props.class_grid_label}",
+                                        //width: "100%",
+                                        height: "100%",
+                                        display: "inline-flex",
+                                        align_items: "center",
+                                        line_height: "1",
+                                        float: "right",
+                                        text_align: "right",
+                                        "{label}"
                                     }
                                 } else {
-                                    rsx! {
-                                        span {
-                                            class: "{cx.props.class_grid_label}",
-                                            width: "100%",
-                                            height: "100%",
-                                            display: "inline-block",
-                                            line_height: "1",
-                                            text_align: "center",
-                                            label.as_str()
-                                        }
+                                    span {
+                                        class: "{props.class_grid_label}",
+                                        width: "100%",
+                                        height: "100%",
+                                        display: "inline-block",
+                                        line_height: "1",
+                                        text_align: "center",
+                                        "{label}"
                                     }
-                                }
-                            }
-                        })
-                    }
-                }),
-                stacked_bars_rects.map(|all_series_rects| rsx! {
-                    all_series_rects.iter().enumerate().map(|(i, series_rects)| {
-                        color_var -= 75.0 * (1.0 / (i + 1) as f32);
-
-                        rsx! {
-                            g {
-                                class: "{cx.props.class_bar_group}-{i}",
-                                {
-                                    series_rects.iter().map(|rect| {
-                                        rsx! {
-                                            line {
-                                                x1: "{rect.min.x}",
-                                                y1: "{rect.min.y}",
-                                                x2: "{rect.max.x}",
-                                                y2: "{rect.max.y}",
-                                                class: "{cx.props.class_bar}",
-                                                stroke: "rgb({color_var}, 40, 40)",
-                                                stroke_width: "{cx.props.bar_width}",
-                                            }
-                                        }
-                                    })
                                 }
                             }
                         }
-                    })
-                }),
-                (!cx.props.stacked_bars).then(|| {
-                    rsx! {
-                        cx.props.series.iter().enumerate().map(|(i, a)| {
-                            color_var -= 75.0 * (1.0 / (i + 1) as f32);
-                            let offset = (i as f32 - (cx.props.series.len() as f32 - 1.0) / 2.0) * cx.props.bar_distance;
-                            let tick_centers = axis_label.tick_centers();
-
-                            rsx! {
-                                g {
-                                    class: "{cx.props.class_bar_group}-{i}",
-                                    tick_centers
-                                        .iter()
-                                        .zip(a.iter())
-                                        .map(|(point, v)| {
-
-                                        let end = axis_value.world_to_view(*v, 0.0);
-                                        let (rect, text) = if cx.props.horizontal_bars {
-                                            (
-                                                Rect::new(point.x, point.y + offset, end, point.y + offset),
-                                                TextData {
-                                                    x: end + 5.0,
-                                                    y: point.y + offset,
-                                                    anchor: "start",
-                                                    baseline: "middle"
-                                                }
-                                            )
-                                        } else {
-                                            (
-                                                Rect::new(point.x + offset, point.y, point.x + offset, end),
-                                                TextData {
-                                                    x: point.x + offset,
-                                                    y: end - 5.0,
-                                                    anchor: "middle",
-                                                    baseline: "text-bottom"
-                                                }
-                                            )
-                                        };
-
-                                        let bar_label = {
-                                            if !cx.props.show_series_labels {
-                                                String::new()
-                                            } else if let Some(func) = cx.props.label_interpolation {
-                                                func(*v)
-                                            } else {
-                                                format!("{}", *v)
-                                            }
-                                        };
-
-                                        rsx! {
-                                            line {
-                                                x1: "{rect.min.x}",
-                                                y1: "{rect.min.y}",
-                                                x2: "{rect.max.x}",
-                                                y2: "{rect.max.y}",
-                                                class: "{cx.props.class_bar}",
-                                                stroke: "rgb({color_var}, 40, 40)",
-                                                stroke_width: "{cx.props.bar_width}",
-                                            },
-                                            cx.props.show_series_labels.then(|| {
-                                                rsx! {
-                                                    text {
-                                                        dx: "{text.x}",
-                                                        dy: "{text.y}",
-                                                        text_anchor: "{text.anchor}",
-                                                        class: "{cx.props.class_bar_label}",
-                                                        alignment_baseline: "{text.baseline}",
-                                                        bar_label.as_str()
-                                                    }
-                                                }
-                                            }),
-                                        }
-                                    })
-                                }
-                            }
-                        })
                     }
-                }),
+                },
+
+                {stacked_bars_rects_rsx}
+
+
+                if !props.stacked_bars {
+                    {series_rsx}
+                }
             }
         }
-    })
+    }
 }
