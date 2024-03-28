@@ -226,7 +226,7 @@ pub fn LineChart(props: LineChartProps) -> Element {
 
     let string_binding = String::new();
     let vec_binding = vec![];
-    
+
     let series_rsx = props
         .series
         .iter()

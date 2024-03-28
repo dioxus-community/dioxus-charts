@@ -1,9 +1,11 @@
-# Dioxus Charts
+[![Discord Server](https://img.shields.io/discord/899851952891002890.svg?logo=discord&style=flat-square)](https://discord.gg/sKJSVNSCDJ)
 
-A simple chart components library for Dioxus
+# dioxus-charts 📊
+
+A simple chart components library for [Dioxus](https://dioxuslabs.com/).
 
 This crate provides some basic SVG-based chart components, customizable with
-CSS, to be used with the [Dioxus](https://dioxuslabs.com/) GUI library. The
+CSS, to be used with the Dioxus GUI library. The
 components configuration was designed to be similar to what one would find
 in JavaScript chart libraries.
 
@@ -23,7 +25,7 @@ used by adding `dioxus-charts` to your dependencies in your project's `Cargo.tom
 
 ```toml
 [dependencies]
-dioxus-charts = "0.1.3"
+dioxus-charts = "0.2"
 ```
 
 ## Example
@@ -32,8 +34,8 @@ dioxus-charts = "0.1.3"
 use dioxus::prelude::*;
 use dioxus_charts::BarChart;
 
-fn app(cx: Scope) -> Element {
-    cx.render(rsx! {
+fn app() -> Element {
+    rsx!(
         BarChart {
             padding_top: 30,
             padding_left: 70,
@@ -41,13 +43,13 @@ fn app(cx: Scope) -> Element {
             padding_bottom: 30,
             bar_width: "10%",
             horizontal_bars: true,
-            label_interpolation: |v| format!("{v}%"),
+            label_interpolation: (|v| format!("{v}%")) as fn(f32) -> String,
             series: vec![
                 vec![63.0, 14.4, 8.0, 5.1, 1.8],
             ],
             labels: vec!["Chrome".into(), "Safari".into(), "IE/Edge".into(), "Firefox".into(), "Opera".into()]
         }
-    })
+    )
 }
  ```
 
@@ -87,7 +89,7 @@ mismatch issue caused by the rustwasm tooling getting out of sync. The simplest 
 to just remove the Cargo.lock file from the `examples/web` folder. Check
 [this issue](https://github.com/rustwasm/wasm-bindgen/issues/2776) for more info if that doesn't do it.
 
-Please check out the [Dioxus reference guide](https://dioxuslabs.com/reference/index.html) for more
+Please check out the [Dioxus reference guide](https://dioxuslabs.com/learn/0.5/reference) for more
 information.
 
 ## License

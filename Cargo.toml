@@ -1,10 +1,10 @@
 [package]
 name = "dioxus-charts"
-version = "0.1.3"
+version = "0.2.0"
 authors = ["Hilton Medeiros"]
 edition = "2021"
-description = "A chart components library for dioxus"
-repository = "https://github.com/hiltonm/dioxus-charts"
+description = "Chart components library for Dioxus"
+repository = "https://github.com/dioxus-community/dioxus-charts"
 license = "MIT OR Apache-2.0"
 keywords = ["ui", "gui", "react", "wasm", "dioxus"]
 categories = ["wasm", "gui", "web-programming"]
