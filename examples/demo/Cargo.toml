@@ -8,6 +8,6 @@ license = "MIT OR Apache-2.0"
 publish = false
 
 [dependencies]
-dioxus = { version = "0.5.0-alpha.2", default-features = false, features = ["macro", "html"] }
+dioxus = { version = "0.5", default-features = false, features = ["launch", "macro", "html"] }
 dioxus-charts = { path = "../.." }
 
