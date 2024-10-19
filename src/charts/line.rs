@@ -52,6 +52,8 @@ pub struct LineChartProps {
     dot_size: String,
     #[props(optional)]
     label_interpolation: Option<fn(f32) -> String>,
+    #[props(default = false)]
+    stacked_lines: bool,
 
     #[props(optional)]
     lowest: Option<f32>,
@@ -146,6 +148,7 @@ pub struct LineChartProps {
 /// - `dot_size`: &[str] (default: `"3%"`): The size of the line dots.
 /// - `label_interpolation`: fn([f32]) -> [String] (optional): Function for formatting the
 /// generated labels.
+/// - `stacked_lines`: [bool] (default: `false`): Stack lines on top of each other.
 /// ---
 /// - `class_chart_line`: &[str] (default: `"dx-chart-line"`): The HTML element `class` of the
 /// chart.
@@ -188,6 +191,7 @@ pub fn LineChart(props: LineChartProps) -> Element {
         .with_max_ticks(max_ticks)
         .with_grid_ticks(props.show_grid_ticks)
         .with_series(&props.series)
+        .with_stacked_series(props.stacked_lines)
         .with_label_interpolation(props.label_interpolation)
         .with_highest(props.highest)
         .with_lowest(props.lowest);
@@ -227,8 +231,24 @@ pub fn LineChart(props: LineChartProps) -> Element {
     let string_binding = String::new();
     let vec_binding = vec![];
 
-    let series_rsx = props
-        .series
+    // for stacked_lines calculate the cumulative sum of individual lines
+    let series = if props.stacked_lines {
+        let mut cumulative_series: Vec<Vec<f32>> = Vec::new();
+        for series in props.series.iter() {
+            let mut new_series = series.clone();
+            if let Some(prev_series) = cumulative_series.last() {
+                for (i, val) in new_series.iter_mut().enumerate() {
+                    *val += prev_series[i];
+                }
+            }
+            cumulative_series.push(new_series);
+        }
+        cumulative_series
+    } else {
+        props.series
+    };
+
+    let series_rsx = series
         .iter()
         .enumerate()
         .zip(
