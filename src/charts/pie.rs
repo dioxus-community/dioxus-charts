@@ -126,6 +126,7 @@ pub struct PieChartProps {
 /// slices.
 /// - `class_label`: &[str] (default: `"dx-label"`): The HTML element `class` for all labels.
 #[allow(non_snake_case)]
+#[component]
 pub fn PieChart(props: PieChartProps) -> Element {
     if props.series.is_empty() {
         return rsx!("Pie chart error: empty series");

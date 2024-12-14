@@ -162,6 +162,7 @@ pub struct BarChartProps {
 /// - `class_grid_labels`: &[str] (default: `"dx-grid-labels"`): The HTML element `class` of the
 /// group of grid labels.
 #[allow(non_snake_case)]
+#[component]
 pub fn BarChart(props: BarChartProps) -> Element {
     for series in props.series.iter() {
         if series.is_empty() {
