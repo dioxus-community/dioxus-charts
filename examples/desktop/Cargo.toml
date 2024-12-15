@@ -11,4 +11,4 @@ publish = false
 log = "0.4"
 env_logger = "0.10"
 charts-demo = { path = "../demo" }
-dioxus = { version = "0.5", features = ["desktop"] }
+dioxus = { version = "0.6", features = ["desktop"] }
