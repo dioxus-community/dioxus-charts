@@ -1,6 +1,6 @@
 [package]
 name = "dioxus-charts"
-version = "0.3.0"
+version = "0.3.1"
 authors = ["Hilton Medeiros"]
 edition = "2021"
 description = "Chart components library for Dioxus"

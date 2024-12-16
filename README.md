@@ -25,7 +25,7 @@ used by adding `dioxus-charts` to your dependencies in your project's `Cargo.tom
 
 ```toml
 [dependencies]
-dioxus-charts = "0.2"
+dioxus-charts = "0.3"
 ```
 
 ## Example
@@ -89,7 +89,7 @@ mismatch issue caused by the rustwasm tooling getting out of sync. The simplest 
 to just remove the Cargo.lock file from the `examples/web` folder. Check
 [this issue](https://github.com/rustwasm/wasm-bindgen/issues/2776) for more info if that doesn't do it.
 
-Please check out the [Dioxus reference guide](https://dioxuslabs.com/learn/0.5/reference) for more
+Please check out the [Dioxus reference guide](https://dioxuslabs.com/learn/0.6/reference) for more
 information.
 
 ## License
