@@ -338,7 +338,7 @@ pub fn LineChart(props: LineChartProps) -> Element {
                                 dy: "{text.y}",
                                 text_anchor: "{text.anchor}",
                                 class: "{props.class_grid_label}",
-                                alignment_baseline: "{text.baseline}",
+                                dominant_baseline: "{text.baseline}",
                                 "{label}"
                             }
                         }

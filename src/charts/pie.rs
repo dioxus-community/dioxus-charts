@@ -241,7 +241,7 @@ pub fn PieChart(props: PieChartProps) -> Element {
                                             dy: "{position.y}",
                                             text_anchor: "middle",
                                             class: "{props.class_label}",
-                                            alignment_baseline: "middle",
+                                            dominant_baseline: "middle",
                                             "{label}"
                                         }
                                     })
@@ -268,7 +268,7 @@ pub fn PieChart(props: PieChartProps) -> Element {
                                             dy: "{position.y}",
                                             text_anchor: "middle",
                                             class: "{props.class_label}",
-                                            alignment_baseline: "middle",
+                                            dominant_baseline: "middle",
                                             "{label}"
                                         }
                                     })
