@@ -385,7 +385,7 @@ impl<'a> AxisBuilder<'a> {
 
             let range = max - min;
             debug!("range: {} min: {}, max: {}", range, min, max);
-            let steps = unsafe { (range / step).round().to_int_unchecked::<i32>() + 1 };
+            let steps = (range / step).round() as i32 + 1;
             debug!("steps: {}", steps);
 
             Axis {
