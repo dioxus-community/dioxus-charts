@@ -471,6 +471,7 @@ pub fn BarChart(props: BarChartProps) -> Element {
                                         display: "inline-block",
                                         line_height: "1",
                                         text_align: "center",
+                                        style: "transform: rotate(90deg); transform-origin: center; font-size: 8px;",
                                         "{label}"
                                     }
                                 }
