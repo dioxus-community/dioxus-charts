@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 
-use crate::grid::{Axis, Grid};
+use crate::grid::{Axis, Grid, GridError};
 use crate::types::*;
 
 /// The `LineChart` properties struct for the configuration of the line chart.
@@ -165,7 +165,7 @@ pub struct LineChartProps {
 pub fn LineChart(props: LineChartProps) -> Element {
     for series in props.series.iter() {
         if series.is_empty() {
-            return rsx!("Line chart error: empty series");
+            return rsx!( "Line chart error: empty series" );
         }
     }
 
@@ -192,7 +192,11 @@ pub fn LineChart(props: LineChartProps) -> Element {
         .with_highest(props.highest)
         .with_lowest(props.lowest);
 
-    let grid = Grid::new(axis_x, axis_y);
+    let grid = match Grid::new(axis_x, axis_y) {
+        Ok(grid) => grid,
+        Err(GridError::EmptySeries) => return rsx!( "Line chart error: empty series" ),
+        Err(GridError::EmptyDataInSeries) => return rsx!( "Line chart error: empty data in series" ),
+    };
     let lines = grid.lines();
     let generated_labels = grid.y.generated_labels();
 
@@ -267,8 +271,7 @@ pub fn LineChart(props: LineChartProps) -> Element {
             let commands = commands.join(" ");
 
             rsx! {
-                g {
-                    class: "{props.class_line}-{i}",
+                g { class: "{props.class_line}-{i}",
                     path {
                         d: "{commands}",
                         class: "{props.class_line_path}",
@@ -276,7 +279,7 @@ pub fn LineChart(props: LineChartProps) -> Element {
                         stroke_width: "{props.line_width}",
                         stroke_linecap: "round",
                         fill: "transparent",
-                    },
+                    }
                     for d in dots {
                         line {
                             x1: "{d.min.x}",
@@ -313,8 +316,7 @@ pub fn LineChart(props: LineChartProps) -> Element {
                 preserve_aspect_ratio: "xMidYMid meet",
                 view_box: "0 0 {props.viewbox_width} {props.viewbox_height}",
                 if props.show_grid {
-                    g {
-                        class: "{props.class_grid}",
+                    g { class: "{props.class_grid}",
                         for line in lines {
                             line {
                                 x1: "{line.min.x}",
@@ -330,9 +332,8 @@ pub fn LineChart(props: LineChartProps) -> Element {
                 }
 
                 for labels in grid_labels {
-                    g {
-                        class: "{props.class_grid_labels}",
-                        for (text, label) in labels {
+                    g { class: "{props.class_grid_labels}",
+                        for (text , label) in labels {
                             text {
                                 dx: "{text.x}",
                                 dy: "{text.y}",

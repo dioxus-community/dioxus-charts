@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 
-use crate::grid::{Axis, Grid};
+use crate::grid::{Axis, Grid, GridError};
 use crate::types::*;
 
 /// The `BarChart` properties struct for the configuration of the bar chart.
@@ -165,7 +165,7 @@ pub struct BarChartProps {
 pub fn BarChart(props: BarChartProps) -> Element {
     for series in props.series.iter() {
         if series.is_empty() {
-            return rsx!("Bar chart error: empty series");
+            return rsx!( "Bar chart error: empty series" );
         }
     }
 
@@ -201,10 +201,16 @@ pub fn BarChart(props: BarChartProps) -> Element {
             .with_highest(props.highest)
             .with_lowest(Some(lowest));
 
-        if props.horizontal_bars {
+        let grid_result = if props.horizontal_bars {
             Grid::new(axis_y, axis_x)
         } else {
             Grid::new(axis_x, axis_y)
+        };
+
+        match grid_result {
+            Ok(grid) => grid,
+            Err(GridError::EmptySeries) => return rsx!( "Bar chart error: empty series" ),
+            Err(GridError::EmptyDataInSeries) => return rsx!( "Bar chart error: empty data in series" ),
         }
     };
 
@@ -304,25 +310,28 @@ pub fn BarChart(props: BarChartProps) -> Element {
     let stacked_bars_rects_rsx = stacked_bars_rects.map(|all_series_rects| {
         rsx! {
             //all_series_rects.iter().enumerate().map(|(i, series_rects)| {
-            for (i, series_rects) in all_series_rects.iter().enumerate() {
-                {color_var -= 75.0 * (1.0 / (i + 1) as f32);}
+            for (i , series_rects) in all_series_rects.iter().enumerate() {
+                {
+                    color_var -= 75.0 * (1.0 / (i + 1) as f32);
+                }
 
-                g {
-                    class: "{props.class_bar_group}-{i}",
+                g { class: "{props.class_bar_group}-{i}",
                     {
-                        series_rects.iter().map(|rect| {
-                            rsx! {
-                                line {
-                                    x1: "{rect.min.x}",
-                                    y1: "{rect.min.y}",
-                                    x2: "{rect.max.x}",
-                                    y2: "{rect.max.y}",
-                                    class: "{props.class_bar}",
-                                    stroke: "rgb({color_var}, 40, 40)",
-                                    stroke_width: "{props.bar_width}",
+                        series_rects
+                            .iter()
+                            .map(|rect| {
+                                rsx! {
+                                    line {
+                                        x1: "{rect.min.x}",
+                                        y1: "{rect.min.y}",
+                                        x2: "{rect.max.x}",
+                                        y2: "{rect.max.y}",
+                                        class: "{props.class_bar}",
+                                        stroke: "rgb({color_var}, 40, 40)",
+                                        stroke_width: "{props.bar_width}",
+                                    }
                                 }
-                            }
-                        })
+                            })
                     }
                 }
             }
@@ -377,7 +386,7 @@ pub fn BarChart(props: BarChartProps) -> Element {
                     class: "{props.class_bar}",
                     stroke: "rgb({color_var}, 40, 40)",
                     stroke_width: "{props.bar_width}",
-                },
+                }
                 if props.show_series_labels {
                     text {
                         dx: "{text.x}",
@@ -387,15 +396,12 @@ pub fn BarChart(props: BarChartProps) -> Element {
                         alignment_baseline: "{text.baseline}",
                         "{bar_label}"
                     }
-                },
+                }
             }
         });
 
         rsx! {
-            g {
-                class: "{props.class_bar_group}-{i}",
-                {tick_centers_rsx}
-            }
+            g { class: "{props.class_bar_group}-{i}", {tick_centers_rsx} }
         }
     });
 
@@ -410,8 +416,7 @@ pub fn BarChart(props: BarChartProps) -> Element {
                 view_box: "0 0 {props.viewbox_width} {props.viewbox_height}",
 
                 if props.show_grid {
-                    g {
-                        class: "{props.class_grid}",
+                    g { class: "{props.class_grid}",
                         for line in lines {
                             line {
                                 x1: "{line.min.x}",
@@ -424,12 +429,11 @@ pub fn BarChart(props: BarChartProps) -> Element {
                             }
                         }
                     }
-                },
+                }
 
                 for labels in grid_labels {
-                    g {
-                        class: "{props.class_grid_labels}",
-                        for (text, label) in labels {
+                    g { class: "{props.class_grid_labels}",
+                        for (text , label) in labels {
                             text {
                                 dx: "{text.x}",
                                 dy: "{text.y}",
@@ -440,12 +444,11 @@ pub fn BarChart(props: BarChartProps) -> Element {
                             }
                         }
                     }
-                },
+                }
 
                 for labels in grid_centered_labels {
-                    g {
-                        class: "{props.class_grid_labels}",
-                        for (rect, label) in labels {
+                    g { class: "{props.class_grid_labels}",
+                        for (rect , label) in labels {
                             foreignObject {
                                 x: "{rect.min.x}",
                                 y: "{rect.min.y}",
@@ -477,10 +480,9 @@ pub fn BarChart(props: BarChartProps) -> Element {
                             }
                         }
                     }
-                },
+                }
 
                 {stacked_bars_rects_rsx}
-
 
                 if !props.stacked_bars {
                     {series_rsx}
