@@ -6,6 +6,12 @@ use crate::utils::magnitude;
 const LABEL_OFFSET: f32 = 6.0;
 const TICK_SIZE: f32 = 10.0;
 
+#[derive(Debug, Clone)]
+pub enum GridError {
+    EmptySeries,
+    EmptyDataInSeries,
+}
+
 #[derive(Copy, Clone)]
 pub enum Direction {
     Horizontal,
@@ -299,7 +305,7 @@ impl<'a> AxisBuilder<'a> {
         self
     }
 
-    pub fn build(self) -> Axis {
+    pub fn build(self) -> Result<Axis, GridError> {
         if let Some(series) = self.series {
             let highest = if let Some(high) = self.highest {
                 high
@@ -307,13 +313,19 @@ impl<'a> AxisBuilder<'a> {
                 MultiZip(series.iter().map(|a| a.iter().copied()).collect())
                     .map(|t| t.iter().sum())
                     .reduce(f32::max)
-                    .unwrap()
+                    .ok_or(GridError::EmptySeries)?
             } else {
                 series
                     .iter()
-                    .map(|a| a.iter().copied().reduce(f32::max).unwrap())
+                    .map(|a| {
+                        a.iter()
+                            .copied()
+                            .reduce(f32::max)
+                            .ok_or(GridError::EmptyDataInSeries)
+                    })
+                    .collect::<Result<Vec<_>, _>>()?                    .into_iter()
                     .reduce(f32::max)
-                    .unwrap()
+                    .ok_or(GridError::EmptySeries)?
             };
 
             //if self.stacked_series {
@@ -329,9 +341,15 @@ impl<'a> AxisBuilder<'a> {
             } else {
                 series
                     .iter()
-                    .map(|a| a.iter().copied().reduce(f32::min).unwrap())
+                    .map(|a| {
+                        a.iter()
+                            .copied()
+                            .reduce(f32::min)
+                            .ok_or(GridError::EmptyDataInSeries)
+                    })
+                    .collect::<Result<Vec<_>, _>>()?                    .into_iter()
                     .reduce(f32::min)
-                    .unwrap()
+                    .ok_or(GridError::EmptySeries)?
             };
 
             debug!("highest: {}", highest);
@@ -388,7 +406,7 @@ impl<'a> AxisBuilder<'a> {
             let steps = (range / step).round() as i32 + 1;
             debug!("steps: {}", steps);
 
-            Axis {
+            Ok(Axis {
                 view: self.view,
                 step_len: step,
                 steps,
@@ -398,7 +416,7 @@ impl<'a> AxisBuilder<'a> {
                 grid_ticks: self.grid_ticks,
                 label_size: self.label_size,
                 direction: self.direction,
-            }
+            })
         } else if let Some(labels) = self.labels {
             let len = labels.len();
             let steps = if self.labels_centered {
@@ -407,7 +425,7 @@ impl<'a> AxisBuilder<'a> {
                 len as i32
             };
 
-            Axis {
+            Ok(Axis {
                 view: self.view,
                 step_len: steps as f32 / (steps as f32 - 1.0),
                 steps,
@@ -416,9 +434,9 @@ impl<'a> AxisBuilder<'a> {
                 label_size: self.label_size,
                 direction: self.direction,
                 ..Axis::default()
-            }
+            })
         } else {
-            Axis::default()
+            Ok(Axis::default())
         }
     }
 }
@@ -429,11 +447,11 @@ pub(crate) struct Grid {
 }
 
 impl Grid {
-    pub fn new<'a>(x: AxisBuilder<'a>, y: AxisBuilder<'a>) -> Grid {
-        Grid {
-            x: x.with_direction(Direction::Vertical).build(),
-            y: y.with_direction(Direction::Horizontal).build(),
-        }
+    pub fn new<'a>(x: AxisBuilder<'a>, y: AxisBuilder<'a>) -> Result<Grid, GridError> {
+        Ok(Grid {
+            x: x.with_direction(Direction::Vertical).build()?,
+            y: y.with_direction(Direction::Horizontal).build()?,
+        })
     }
 
     pub fn world_to_view(&self, cx: f32, cy: f32, inverted: bool) -> Point {
